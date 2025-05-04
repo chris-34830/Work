@@ -1,0 +1,529 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tutoriel : Utiliser la fonction LET pour transformer des données brutes</title>
+    <style>
+        body {
+            font-family: 'Calibri', sans-serif;
+            line-height: 1.6;
+            color: #333;
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        h1 {
+            color: #2D5B8E;
+            border-bottom: 2px solid #2D5B8E;
+            padding-bottom: 5px;
+        }
+        h2 {
+            color: #2D5B8E;
+            margin-top: 25px;
+        }
+        h3 {
+            color: #2D5B8E;
+        }
+        .highlight {
+            background-color: #f5f7fa;
+            padding: 15px;
+            border-left: 4px solid #2D5B8E;
+            margin: 15px 0;
+        }
+        code {
+            font-family: 'Consolas', monospace;
+            background-color: #f5f7fa;
+            padding: 2px 4px;
+            border-radius: 3px;
+        }
+        pre {
+            background-color: #f5f7fa;
+            padding: 15px;
+            overflow-x: auto;
+            border-radius: 5px;
+        }
+        table {
+            border-collapse: collapse;
+            width: 100%;
+            margin: 20px 0;
+        }
+        th, td {
+            border: 1px solid #ddd;
+            padding: 8px;
+            text-align: left;
+        }
+        th {
+            background-color: #f2f2f2;
+        }
+        tr:nth-child(even) {
+            background-color: #f9f9f9;
+        }
+        .tip {
+            background-color: #E8F4F8;
+            padding: 10px;
+            border-left: 4px solid #5BC0DE;
+            margin: 15px 0;
+        }
+        .warning {
+            background-color: #FFF8E8;
+            padding: 10px;
+            border-left: 4px solid #F0AD4E;
+            margin: 15px 0;
+        }
+        .formula {
+            font-family: 'Consolas', monospace;
+            background-color: #f0f7ff;
+            padding: 10px;
+            border-radius: 5px;
+            margin: 10px 0;
+        }
+        .steps {
+            background-color: #f9f9f9;
+            padding: 15px;
+            border-radius: 5px;
+            margin: 15px 0;
+        }
+    </style>
+</head>
+<body>
+    <h1>Utiliser la fonction LET pour transformer des données brutes en échantillons d'étude</h1>
+    
+    <h2>Introduction à la fonction LET</h2>
+    <p>La fonction LET, introduite dans Excel 365/2021, permet de créer des variables nommées au sein d'une formule. Cette fonctionnalité, en apparence simple, transforme radicalement notre façon d'aborder les tâches complexes de manipulation de données dans Excel, particulièrement lors de la préparation de données brutes pour l'analyse.</p>
+    
+    <div class="highlight">
+        <p><strong>La syntaxe de base de LET est :</strong></p>
+        <div class="formula">
+            =LET(nom1, valeur1, nom2, valeur2, ..., calcul_utilisant_les_noms)
+        </div>
+        <p>Où :</p>
+        <ul>
+            <li><code>nom1</code>, <code>nom2</code>, etc. sont vos noms de variables personnalisés</li>
+            <li><code>valeur1</code>, <code>valeur2</code>, etc. sont les valeurs attribuées à ces variables</li>
+            <li>Le dernier argument est le calcul qui utilise ces variables nommées</li>
+        </ul>
+    </div>
+    
+    <p>Bien que cela puisse sembler simple, LET offre plusieurs avantages significatifs lors de la transformation de données brutes en populations d'étude utilisables :</p>
+    
+    <ul>
+        <li><strong>Lisibilité améliorée</strong> - Les formules complexes deviennent plus faciles à comprendre</li>
+        <li><strong>Performance accrue</strong> - Excel n'évalue chaque variable définie qu'une seule fois</li>
+        <li><strong>Approche modulaire</strong> - Construction de pipelines de données en étapes séquentielles claires</li>
+        <li><strong>Autonomie</strong> - Tout se passe dans la formule sans nécessiter de colonnes supplémentaires</li>
+    </ul>
+    
+    <p>Le tutoriel suivant explore l'utilisation de LET à travers trois niveaux d'expertise, en se concentrant spécifiquement sur la transformation de données brutes en une population d'étude nettoyée ou un échantillon statistique.</p>
+    
+    <h2>Niveau Débutant : Sélection de données de base</h2>
+    
+    <h3>Scénario : Identifier les participants adultes</h3>
+    <p>Imaginons que vous avez importé des données brutes dans une feuille nommée "DonneesBrutes" avec la structure suivante :</p>
+    
+    <table>
+        <tr>
+            <th>A</th>
+            <th>B</th>
+            <th>C</th>
+            <th>D</th>
+            <th>E</th>
+        </tr>
+        <tr>
+            <th>ID</th>
+            <th>Âge</th>
+            <th>Sexe</th>
+            <th>Poids</th>
+            <th>Taille</th>
+        </tr>
+        <tr>
+            <td>1001</td>
+            <td>24</td>
+            <td>F</td>
+            <td>65</td>
+            <td>1.68</td>
+        </tr>
+        <tr>
+            <td>1002</td>
+            <td>17</td>
+            <td>M</td>
+            <td>70</td>
+            <td>1.75</td>
+        </tr>
+        <tr>
+            <td>...</td>
+            <td>...</td>
+            <td>...</td>
+            <td>...</td>
+            <td>...</td>
+        </tr>
+    </table>
+    
+    <h3>1. Comptage simple sans LET</h3>
+    <p>Si vous souhaitez compter les participants adultes (Âge ≥ 18), vous pourriez utiliser :</p>
+    <div class="formula">
+        =NB.SI(DonneesBrutes!B2:B1000; ">=18")
+    </div>
+    
+    <h3>2. Comptage avec LET</h3>
+    <p>L'utilisation de LET rend cela plus clair et plus facile à maintenir :</p>
+    <div class="formula">
+        =LET(
+            ages; DonneesBrutes!B2:B1000;
+            NB.SI(ages; ">=18")
+        )
+    </div>
+    
+    <div class="tip">
+        <p><strong>Astuce pour débutant :</strong> LET peut remplacer les plages nommées lorsque vous souhaitez que tout soit contenu dans la cellule elle-même. C'est particulièrement utile lors du partage de classeurs avec d'autres personnes qui n'auraient pas accès à vos plages nommées.</p>
+    </div>
+    
+    <h3>3. Effectuer plusieurs opérations</h3>
+    <p>LET révèle tout son potentiel lorsque vous devez effectuer plusieurs opérations sur les mêmes données :</p>
+    <div class="formula">
+        =LET(
+            ages; DonneesBrutes!B2:B1000;
+            nb_adultes; NB.SI(ages; ">=18");
+            nb_mineurs; NB.SI(ages; "<18");
+            "Adultes : " & nb_adultes & ", Mineurs : " & nb_mineurs & ", Ratio : " & nb_adultes/nb_mineurs
+        )
+    </div>
+    
+    <p>Remarquez comment nous n'avons référencé la plage <code>ages</code> qu'une seule fois, mais l'avons utilisée plusieurs fois dans nos calculs. Cela améliore les performances et rend la formule plus facile à maintenir.</p>
+    
+    <h2>Niveau Intermédiaire : Nettoyage des données et sélection de population</h2>
+    
+    <h3>Scénario : Créer une population d'étude propre</h3>
+    <p>Allons plus loin dans notre analyse. Nous voulons :</p>
+    <ol>
+        <li>Filtrer les enregistrements incomplets (Âge, Poids ou Taille manquants)</li>
+        <li>Calculer l'IMC (Poids / Taille²)</li>
+        <li>Supprimer les doublons d'ID, en ne gardant que l'entrée la plus récente</li>
+        <li>Créer un ensemble de données propre pour notre population d'étude</li>
+    </ol>
+    
+    <div class="formula">
+        =LET(
+            id; DonneesBrutes!A2:A1000;
+            age; DonneesBrutes!B2:B1000;
+            sexe; DonneesBrutes!C2:C1000;
+            poids; DonneesBrutes!D2:D1000;
+            taille; DonneesBrutes!E2:E1000;
+            
+            /* Étape 1 : Créer un indicateur de validité pour les enregistrements complets */
+            lignes_valides; (age<>"")*(poids<>"")*(taille<>"");
+            
+            /* Étape 2 : Filtrer et ajouter la colonne IMC calculée */
+            donnees_propres; FILTER(
+                CHOOSE({1;2;3;4;5;6};
+                    id; age; sexe; poids; taille;
+                    poids/(taille^2)  /* Création de la colonne IMC */
+                );
+                lignes_valides
+            );
+            
+            /* Étape 3 : Trier par ID dans l'ordre décroissant */
+            donnees_triees; SORT(donnees_propres; 1; -1);
+            
+            /* Étape 4 : Supprimer les doublons, en gardant la première occurrence (la plus récente) */
+            FILTER(
+                donnees_triees;
+                COUNTIFS(
+                    SEQUENCE(ROWS(donnees_triees)); "<="&SEQUENCE(ROWS(donnees_triees));
+                    INDEX(donnees_triees;;1); INDEX(donnees_triees;SEQUENCE(ROWS(donnees_triees));1)
+                )=1
+            )
+        )
+    </div>
+    
+    <div class="steps">
+        <p><strong>Comprendre ce qui se passe :</strong></p>
+        <ol>
+            <li>Nous définissons des variables pour chaque colonne de nos données brutes</li>
+            <li>Nous créons un indicateur <code>lignes_valides</code> en utilisant la multiplication d'expressions booléennes (VRAI=1, FAUX=0)</li>
+            <li>Nous filtrons nos données et ajoutons le calcul de l'IMC comme 6ème colonne en utilisant CHOOSE</li>
+            <li>Nous trions par ID dans l'ordre décroissant pour que les entrées les plus récentes apparaissent en premier</li>
+            <li>Nous supprimons les doublons en filtrant les lignes où l'ID actuel n'est pas apparu auparavant</li>
+        </ol>
+    </div>
+    
+    <div class="warning">
+        <p><strong>Remarque :</strong> La formule ci-dessus suppose que les ID sont chronologiques (les enregistrements plus récents ont des ID plus élevés). Si ce n'est pas le cas, vous devriez modifier l'approche pour utiliser une colonne de date pour identifier les enregistrements les plus récents.</p>
+    </div>
+    
+    <h3>Ajout de variables dérivées</h3>
+    <p>Nous pouvons enrichir notre population d'étude en ajoutant des variables dérivées, comme la catégorie d'IMC :</p>
+    
+    <div class="formula">
+        =LET(
+            /* Définitions de variables précédentes... */
+            
+            /* Après avoir créé donnees_propres avec l'IMC en colonne 6 */
+            avec_imc; donnees_propres;
+            
+            /* Ajouter la catégorie d'IMC comme colonne 7 */
+            donnees_completes; MAP(
+                avec_imc;
+                LAMBDA(ligne;
+                    LET(
+                        imc; INDEX(ligne; 6);
+                        categorie_imc; 
+                        SI(imc<18.5; "Sous-poids";
+                          SI(imc<25; "Normal";
+                            SI(imc<30; "Surpoids"; "Obésité")
+                          )
+                        );
+                        HSTACK(ligne; categorie_imc)
+                    )
+                )
+            );
+            
+            /* Continuer avec la suppression des doublons comme précédemment... */
+            donnees_completes
+        )
+    </div>
+    
+    <p>Ceci démontre comment LET nous permet de construire des pipelines complexes de transformation de données étape par étape, rendant chaque étape claire et gérable.</p>
+    
+    <h2>Niveau Expert : Création de fonctions d'échantillonnage réutilisables</h2>
+    
+    <h3>Scénario : Créer des échantillons aléatoires à partir de votre population d'étude</h3>
+    <p>Une fois que vous avez une population d'étude propre, vous pouvez vouloir tirer des échantillons aléatoires pour diverses analyses. En utilisant LET combiné avec LAMBDA, nous pouvons créer des fonctions d'échantillonnage puissantes et réutilisables.</p>
+    
+    <h3>1. Définir une fonction LAMBDA d'échantillonnage aléatoire</h3>
+    <p>Tout d'abord, définissez ceci dans le Gestionnaire de noms (ou dans n'importe quelle cellule) :</p>
+    
+    <div class="formula">
+        EchantillonAleatoire :=
+        LAMBDA(donnees; pourcentage_echantillon;
+            LET(
+                nb_lignes; ROWS(donnees);
+                taille_echantillon; ROUND(nb_lignes * pourcentage_echantillon; 0);
+                indices_aleatoires; SORTBY(SEQUENCE(nb_lignes); RANDARRAY(nb_lignes));
+                TAKE(INDEX(donnees; indices_aleatoires; ); taille_echantillon)
+            )
+        )
+    </div>
+    
+    <h3>2. Utiliser la fonction sur votre population nettoyée</h3>
+    <p>Une fois définie, vous pouvez l'utiliser pour tirer un échantillon aléatoire de 10% :</p>
+    
+    <div class="formula">
+        =EchantillonAleatoire(PopulationPropre; 0.1)
+    </div>
+    
+    <p>Où <code>PopulationPropre</code> fait référence au résultat de votre formule de niveau intermédiaire (ou à une plage nommée contenant ce résultat).</p>
+    
+    <h3>3. Créer une fonction d'échantillonnage stratifié</h3>
+    <p>Pour des recherches plus avancées, vous pourriez avoir besoin d'un échantillonnage stratifié pour maintenir une représentation proportionnelle des groupes clés :</p>
+    
+    <div class="formula">
+        EchantillonStratifie :=
+        LAMBDA(donnees; col_strat; pourcentage_echantillon;
+            LET(
+                strates_uniques; UNIQUE(INDEX(donnees; ; col_strat));
+                nb_strates; ROWS(strates_uniques);
+                
+                /* Créer des échantillons pour chaque strate */
+                echantillons; MAP(
+                    SEQUENCE(nb_strates);
+                    LAMBDA(i;
+                        LET(
+                            strate; INDEX(strates_uniques; i);
+                            donnees_strate; FILTER(donnees; INDEX(donnees; ; col_strat) = strate);
+                            EchantillonAleatoire(donnees_strate; pourcentage_echantillon)
+                        )
+                    )
+                );
+                
+                /* Combiner tous les échantillons */
+                VSTACK(echantillons)
+            )
+        )
+    </div>
+    
+    <p>Maintenant, vous pouvez créer un échantillon stratifié par sexe :</p>
+    
+    <div class="formula">
+        =EchantillonStratifie(PopulationPropre; 3; 0.1)  /* En supposant que le sexe est la colonne 3 */
+    </div>
+    
+    <h3>4. Pipeline complet de données dans une seule cellule</h3>
+    <p>La véritable puissance de LET émerge lorsque vous combinez toutes ces étapes en un pipeline complet de traitement des données :</p>
+    
+    <div class="formula">
+        =LET(
+            /* Extraction des données brutes */
+            donnees_brutes; DonneesBrutes!A2:E1000;
+            
+            /* Nettoyage des données et préparation de la population */
+            population_propre; LET(
+                /* Tout le code de niveau intermédiaire d'avant */
+                /* ... */
+                resultat_du_nettoyage
+            );
+            
+            /* Créer un échantillon stratifié */
+            echantillon_final; EchantillonStratifie(population_propre; 3; 0.15);
+            
+            /* Renvoyer l'échantillon final pour analyse */
+            echantillon_final
+        )
+    </div>
+    
+    <p>Cette approche crée un flux de travail complet de transformation des données, tout en restant dans une seule formule, avec des étapes claires qui sont faciles à maintenir et à mettre à jour.</p>
+    
+    <h2>Techniques avancées pour les données de recherche</h2>
+    
+    <h3>Application des critères d'inclusion/exclusion</h3>
+    <p>La recherche nécessite souvent des critères d'inclusion/exclusion spécifiques. LET facilite leur mise en œuvre :</p>
+    
+    <div class="formula">
+        =LET(
+            /* Données de base */
+            id; DonneesBrutes!A2:A1000;
+            age; DonneesBrutes!B2:B1000;
+            sexe; DonneesBrutes!C2:C1000;
+            poids; DonneesBrutes!D2:D1000;
+            taille; DonneesBrutes!E2:E1000;
+            diabete; DonneesBrutes!F2:F1000;
+            
+            /* Critères d'inclusion */
+            inclusion; (age>=18)*(age<=65)*(taille>0)*(poids>0);
+            
+            /* Critères d'exclusion */
+            exclusion; (diabete="Oui");
+            
+            /* Éligibilité finale */
+            eligible; inclusion * (1-exclusion);
+            
+            /* Filtrer les participants éligibles */
+            population_etude; FILTER(
+                CHOOSE({1;2;3;4;5};
+                    id; age; sexe; poids; taille
+                );
+                eligible
+            );
+            
+            population_etude
+        )
+    </div>
+    
+    <h3>Appariement des cas et des témoins</h3>
+    <p>Pour les études cas-témoins, vous pourriez avoir besoin d'apparier des cas avec des témoins selon des critères spécifiques :</p>
+    
+    <div class="formula">
+        AppariementCasTemoins :=
+        LAMBDA(cas; temoins; colonnes_appariement;
+            LET(
+                nb_cas; ROWS(cas);
+                nb_temoins; ROWS(temoins);
+                
+                /* Pour chaque cas, trouver le témoin le mieux apparié */
+                appariements; MAP(
+                    SEQUENCE(nb_cas);
+                    LAMBDA(i;
+                        LET(
+                            cas_actuel; INDEX(cas; i);
+                            /* Calculer la distance pour chaque témoin potentiel */
+                            distances; MAP(
+                                SEQUENCE(nb_temoins);
+                                LAMBDA(j;
+                                    LET(
+                                        temoin_potentiel; INDEX(temoins; j);
+                                        /* Calculer la distance euclidienne sur les colonnes spécifiées */
+                                        /* ... calcul de distance ... */
+                                        resultat_distance
+                                    )
+                                )
+                            );
+                            /* Trouver le témoin avec la distance minimale */
+                            idx_dist_min; XMATCH(MIN(distances); distances);
+                            meilleur_appariement; INDEX(temoins; idx_dist_min);
+                            
+                            /* Retourner la paire cas-témoin */
+                            VSTACK(cas_actuel; meilleur_appariement)
+                        )
+                    )
+                );
+                
+                appariements
+            )
+        )
+    </div>
+    
+    <h2>Considérations de performance</h2>
+    
+    <div class="highlight">
+        <p><strong>Lorsque vous travaillez avec de grands jeux de données :</strong></p>
+        <ul>
+            <li>LET améliore significativement les performances en n'évaluant chaque variable qu'une seule fois</li>
+            <li>Pour de très grands jeux de données (>100 000 lignes), envisagez de décomposer le traitement en plus petits morceaux</li>
+            <li>Utilisez les fonctions TAKE/DROP pour travailler avec des ensembles de données partiels lorsque c'est approprié</li>
+            <li>Envisagez Power Query pour le nettoyage initial de jeux de données extrêmement volumineux, puis utilisez LET pour les transformations finales</li>
+        </ul>
+    </div>
+    
+    <h2>Résumé : Le pipeline de données avec la fonction LET</h2>
+    
+    <table>
+        <tr>
+            <th>Étape des données</th>
+            <th>Opérations LET clés</th>
+            <th>Fonctions associées</th>
+        </tr>
+        <tr>
+            <td>Extraction des données brutes</td>
+            <td>Définir les variables de données source</td>
+            <td>Références de plage basiques</td>
+        </tr>
+        <tr>
+            <td>Nettoyage des données</td>
+            <td>Filtrer les valeurs manquantes, valider les types de données</td>
+            <td>FILTER, ISTEXT, ISNUMBER</td>
+        </tr>
+        <tr>
+            <td>Transformation des données</td>
+            <td>Calculer des variables dérivées, normaliser les valeurs</td>
+            <td>CHOOSE, MAP, opérateurs mathématiques</td>
+        </tr>
+        <tr>
+            <td>Définition de la population</td>
+            <td>Appliquer les critères d'inclusion/exclusion</td>
+            <td>Opérations booléennes, FILTER</td>
+        </tr>
+        <tr>
+            <td>Dé-duplication</td>
+            <td>Supprimer les enregistrements en double</td>
+            <td>SORT, FILTER, COUNTIFS</td>
+        </tr>
+        <tr>
+            <td>Échantillonnage</td>
+            <td>Créer des échantillons représentatifs</td>
+            <td>RANDARRAY, SORTBY, TAKE</td>
+        </tr>
+        <tr>
+            <td>Préparation à l'analyse</td>
+            <td>Formater le jeu de données final pour l'analyse</td>
+            <td>VSTACK, HSTACK, SORT</td>
+        </tr>
+    </table>
+    
+    <h2>Conclusion</h2>
+    <p>La fonction LET transforme Excel en un environnement puissant de traitement des données, permettant aux chercheurs de créer des pipelines complets de transformation de données directement dans les formules. Cette approche offre plusieurs avantages :</p>
+    
+    <ul>
+        <li>Transparence : Chaque étape de votre traitement de données est visible et documentée</li>
+        <li>Reproductibilité : L'ensemble du pipeline peut être partagé et réutilisé</li>
+        <li>Efficacité : Les calculs sont optimisés, chaque variable n'étant évaluée qu'une seule fois</li>
+        <li>Maintenabilité : Des noms de variables clairs rendent les formules complexes compréhensibles</li>
+    </ul>
+    
+    <p>En maîtrisant la fonction LET pour la transformation des données, vous pouvez rationaliser le processus de préparation des données brutes pour l'analyse, garantissant que vos jeux de données de recherche sont propres, cohérents et prêts pour les tests statistiques. Cette approche réduit le besoin de colonnes de calcul intermédiaires ou de macros VBA complexes, gardant votre flux de travail de recherche rationalisé et efficace.</p>
+
+    <div class="tip">
+        <p><strong>Conseil final :</strong> Bien que LET soit extrêmement puissante, envisagez de stocker les fonctions clés de transformation de données comme des fonctions LAMBDA nommées dans votre classeur. Cela vous permet de les réutiliser à travers plusieurs analyses tout en maintenant une source unique de vérité pour votre logique de traitement des données.</p>
+    </div>
+    
+</body>
+</html>
