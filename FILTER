@@ -1,0 +1,594 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>Maîtriser la fonction FILTER pour le contrôle permanent des dossiers clients</title>
+    <style>
+        body {
+            font-family: Calibri, sans-serif;
+            font-size: 11pt;
+            line-height: 1.5;
+            margin: 2.54cm;
+        }
+        h1 {
+            font-size: 16pt;
+            font-weight: bold;
+            color: #2F5496;
+            margin-top: 24pt;
+            margin-bottom: 6pt;
+        }
+        h2 {
+            font-size: 14pt;
+            font-weight: bold;
+            color: #2F5496;
+            margin-top: 14pt;
+            margin-bottom: 4pt;
+        }
+        h3 {
+            font-size: 12pt;
+            font-weight: bold;
+            color: #1F3864;
+            margin-top: 12pt;
+            margin-bottom: 4pt;
+        }
+        p {
+            margin-top: 6pt;
+            margin-bottom: 6pt;
+        }
+        blockquote {
+            border-left: 4px solid #DDD;
+            padding-left: 10px;
+            margin-left: 0;
+            background-color: #F9F9F9;
+        }
+        code {
+            font-family: Consolas, "Courier New", monospace;
+            background-color: #F8F8F8;
+            padding: 2px 4px;
+            color: #333;
+        }
+        pre {
+            font-family: Consolas, "Courier New", monospace;
+            background-color: #F8F8F8;
+            padding: 10px;
+            border: 1px solid #DDD;
+            overflow-x: auto;
+        }
+        table {
+            border-collapse: collapse;
+            width: 100%;
+            margin: 16px 0;
+        }
+        th, td {
+            border: 1px solid #DDD;
+            padding: 8px;
+            text-align: left;
+        }
+        th {
+            background-color: #F2F2F2;
+        }
+        tr:nth-child(even) {
+            background-color: #F9F9F9;
+        }
+        .note {
+            background-color: #FFF3CD;
+            border-left: 4px solid #FFD700;
+            padding: 10px;
+            margin: 10px 0;
+        }
+        .tip {
+            background-color: #D4EDDA;
+            border-left: 4px solid #28A745;
+            padding: 10px;
+            margin: 10px 0;
+        }
+        .warning {
+            background-color: #F8D7DA;
+            border-left: 4px solid #DC3545;
+            padding: 10px;
+            margin: 10px 0;
+        }
+    </style>
+</head>
+<body>
+    <h1>Maîtriser la fonction FILTER pour le contrôle permanent des dossiers clients</h1>
+    <p><em>Un guide pratique pour l'équipe de contrôle permanent</em></p>
+
+    <p>La fonction FILTER est un outil puissant qui peut transformer radicalement votre approche du contrôle permanent. Elle vous permet de passer efficacement d'une base de données complète à une population ciblée de dossiers clients, puis à un échantillon de contrôle précis, le tout sans recourir à des tableaux croisés dynamiques ou des macros complexes.</p>
+
+    <div class="note">
+        <p><strong>Note importante</strong> : La fonction FILTER est disponible uniquement dans Excel 365/2021 et les versions ultérieures. Assurez-vous que votre équipe dispose des versions compatibles.</p>
+    </div>
+
+    <h2>Table des matières</h2>
+    <ul>
+        <li>1. Les bases de FILTER pour le contrôle permanent</li>
+        <li>2. Sélection des dossiers clients selon des critères multiples</li>
+        <li>3. Construction d'échantillons de contrôle avancés</li>
+        <li>4. Cas pratiques adaptés au contrôle permanent</li>
+        <li>5. Récapitulatif et astuces pour l'équipe</li>
+    </ul>
+
+    <h2>1. Les bases de FILTER pour le contrôle permanent</h2>
+
+    <h3>1.1 Syntaxe fondamentale</h3>
+    <pre><code>=FILTER(plage_à_renvoyer; condition; [valeur_si_vide])</code></pre>
+
+    <p>Où :</p>
+    <ul>
+        <li><code>plage_à_renvoyer</code> est l'ensemble des données clients que vous souhaitez filtrer</li>
+        <li><code>condition</code> est le test logique qui détermine quels dossiers clients inclure</li>
+        <li><code>valeur_si_vide</code> (optionnel) est ce qui s'affiche si aucun dossier ne correspond</li>
+    </ul>
+
+    <h3>1.2 Premier exemple : Filtrer les dossiers par agence</h3>
+
+    <p>Considérons une base de données clients simple :</p>
+
+    <table>
+        <tr>
+            <th>A</th>
+            <th>B</th>
+            <th>C</th>
+            <th>D</th>
+        </tr>
+        <tr>
+            <td>ID Client</td>
+            <td>Nom</td>
+            <td>Agence</td>
+            <td>Montant</td>
+        </tr>
+        <tr>
+            <td>CL001</td>
+            <td>Dupont</td>
+            <td>Paris</td>
+            <td>245 000 €</td>
+        </tr>
+        <tr>
+            <td>CL002</td>
+            <td>Martin</td>
+            <td>Lyon</td>
+            <td>178 500 €</td>
+        </tr>
+        <tr>
+            <td>CL003</td>
+            <td>Dubois</td>
+            <td>Paris</td>
+            <td>310 750 €</td>
+        </tr>
+        <tr>
+            <td>CL004</td>
+            <td>Bernard</td>
+            <td>Marseille</td>
+            <td>92 300 €</td>
+        </tr>
+        <tr>
+            <td>CL005</td>
+            <td>Petit</td>
+            <td>Lyon</td>
+            <td>156 800 €</td>
+        </tr>
+    </table>
+
+    <p>Pour extraire tous les dossiers de l'agence Paris :</p>
+
+    <pre><code>=FILTER(A2:D6; C2:C6="Paris")</code></pre>
+
+    <p>Cette formule retournera :</p>
+
+    <table>
+        <tr>
+            <td>CL001</td>
+            <td>Dupont</td>
+            <td>Paris</td>
+            <td>245 000 €</td>
+        </tr>
+        <tr>
+            <td>CL003</td>
+            <td>Dubois</td>
+            <td>Paris</td>
+            <td>310 750 €</td>
+        </tr>
+    </table>
+
+    <h3>1.3 Comment cela fonctionne pour le contrôle permanent</h3>
+
+    <ol>
+        <li>Le premier argument (<code>A2:D6</code>) définit toutes les informations des dossiers clients à retourner</li>
+        <li>Le deuxième argument (<code>C2:C6="Paris"</code>) crée un tableau de valeurs VRAI/FAUX pour chaque dossier</li>
+        <li>Seuls les dossiers où la condition est VRAIE sont inclus dans le résultat</li>
+    </ol>
+
+    <div class="tip">
+        <p><strong>Conseil pratique</strong> : Si vous travaillez régulièrement avec le même ensemble de données, nommez vos plages (ex : "BaseClients") pour rendre vos formules plus lisibles et faciles à maintenir : <code>=FILTER(BaseClients; BaseClients[Agence]="Paris")</code></p>
+    </div>
+
+    <h3>1.4 Gérer l'absence de résultats</h3>
+
+    <p>Dans le contexte du contrôle permanent, vous devez éviter les erreurs qui pourraient perturber vos rapports. Si aucun dossier ne correspond à vos critères de contrôle, utilisez le troisième paramètre :</p>
+
+    <pre><code>=FILTER(A2:D6; C2:C6="Strasbourg"; "Aucun dossier ne correspond aux critères de contrôle")</code></pre>
+
+    <p>Si aucun client n'est rattaché à l'agence Strasbourg, la formule affichera le message d'information au lieu de l'erreur <code>#CALC!</code>.</p>
+
+    <h2>2. Sélection des dossiers clients selon des critères multiples</h2>
+
+    <h3>2.1 Combiner des critères avec l'opérateur ET</h3>
+
+    <p>Dans le contrôle permanent, vous devez souvent cibler des dossiers répondant à plusieurs critères simultanément. Pour identifier les dossiers de l'agence Paris avec un montant supérieur à 250 000 € :</p>
+
+    <pre><code>=FILTER(A2:D6; (C2:C6="Paris")*(D2:D6>250000))</code></pre>
+
+    <p>Cette formule retournera uniquement :</p>
+
+    <table>
+        <tr>
+            <td>CL003</td>
+            <td>Dubois</td>
+            <td>Paris</td>
+            <td>310 750 €</td>
+        </tr>
+    </table>
+
+    <p>Dans Excel, la multiplication (<code>*</code>) entre conditions agit comme un opérateur ET logique :</p>
+    <ul>
+        <li>VRAI * VRAI = 1 (le dossier respecte tous les critères)</li>
+        <li>VRAI * FAUX = 0 (le dossier est exclu)</li>
+    </ul>
+
+    <h3>2.2 Utiliser l'opérateur OU pour élargir votre sélection</h3>
+
+    <p>Pour contrôler les dossiers de Paris OU avec un montant supérieur à 200 000 € :</p>
+
+    <pre><code>=FILTER(A2:D6; (C2:C6="Paris")+(D2:D6>200000))</code></pre>
+
+    <p>Cette formule retournera :</p>
+
+    <table>
+        <tr>
+            <td>CL001</td>
+            <td>Dupont</td>
+            <td>Paris</td>
+            <td>245 000 €</td>
+        </tr>
+        <tr>
+            <td>CL003</td>
+            <td>Dubois</td>
+            <td>Paris</td>
+            <td>310 750 €</td>
+        </tr>
+    </table>
+
+    <p>Le signe plus (<code>+</code>) fonctionne comme un OU logique - toute valeur non-nulle est considérée comme VRAIE.</p>
+
+    <h3>2.3 Combiner plusieurs critères de métier complexes</h3>
+
+    <p>Étendons notre exemple avec des colonnes supplémentaires pertinentes pour le contrôle permanent :</p>
+
+    <table>
+        <tr>
+            <th>A</th>
+            <th>B</th>
+            <th>C</th>
+            <th>D</th>
+            <th>E</th>
+            <th>F</th>
+        </tr>
+        <tr>
+            <td>ID Client</td>
+            <td>Nom</td>
+            <td>Agence</td>
+            <td>Montant</td>
+            <td>Date contrat</td>
+            <td>Niveau risque</td>
+        </tr>
+        <tr>
+            <td>CL001</td>
+            <td>Dupont</td>
+            <td>Paris</td>
+            <td>245 000 €</td>
+            <td>15/03/2024</td>
+            <td>Modéré</td>
+        </tr>
+        <tr>
+            <td>CL002</td>
+            <td>Martin</td>
+            <td>Lyon</td>
+            <td>178 500 €</td>
+            <td>02/04/2024</td>
+            <td>Faible</td>
+        </tr>
+        <tr>
+            <td>CL003</td>
+            <td>Dubois</td>
+            <td>Paris</td>
+            <td>310 750 €</td>
+            <td>28/01/2024</td>
+            <td>Élevé</td>
+        </tr>
+        <tr>
+            <td>CL004</td>
+            <td>Bernard</td>
+            <td>Marseille</td>
+            <td>92 300 €</td>
+            <td>12/02/2024</td>
+            <td>Faible</td>
+        </tr>
+        <tr>
+            <td>CL005</td>
+            <td>Petit</td>
+            <td>Lyon</td>
+            <td>156 800 €</td>
+            <td>05/05/2024</td>
+            <td>Modéré</td>
+        </tr>
+    </table>
+
+    <p>Pour sélectionner les dossiers à contrôler en priorité (niveau de risque élevé OU montant > 200 000 €) ET contrats signés en 2024 :</p>
+
+    <pre><code>=FILTER(A2:F6; 
+    ((F2:F6="Élevé")+(D2:D6>200000)) * 
+    (YEAR(E2:E6)=2024)
+)</code></pre>
+
+    <div class="tip">
+        <p><strong>Astuce métier</strong> : Pour une meilleure lisibilité des formules complexes, vous pouvez les structurer sur plusieurs lignes comme ci-dessus. Cela facilite la revue et la maintenance par l'équipe.</p>
+    </div>
+
+    <h2>3. Construction d'échantillons de contrôle avancés</h2>
+
+    <h3>3.1 Construire un échantillon aléatoire</h3>
+    
+    <p>Pour le contrôle permanent, il est souvent nécessaire de créer un échantillon aléatoire de dossiers. Voici comment sélectionner aléatoirement 2 dossiers parmi tous les clients :</p>
+
+    <pre><code>=LET(
+    base, A2:F6,
+    aléa, RANDARRAY(ROWS(base)),
+    TAKE(SORTBY(base, aléa), 2)
+)</code></pre>
+
+    <p>Cette formule :</p>
+    <ol>
+        <li>Attribue un nombre aléatoire à chaque dossier client</li>
+        <li>Trie les dossiers selon ces nombres aléatoires</li>
+        <li>Ne conserve que les 2 premiers dossiers après ce tri aléatoire</li>
+    </ol>
+
+    <div class="warning">
+        <p><strong>Attention</strong> : La fonction RANDARRAY génère de nouvelles valeurs à chaque recalcul du classeur. Pour figer votre échantillon, copiez les résultats et utilisez "Collage spécial > Valeurs".</p>
+    </div>
+
+    <h3>3.2 Échantillonnage stratifié par agence</h3>
+
+    <p>Pour un contrôle plus représentatif, vous pouvez vouloir sélectionner proportionnellement des dossiers dans chaque agence :</p>
+
+    <pre><code>=LET(
+    agences, UNIQUE(C2:C6),
+    échantillon, MAP(agences, LAMBDA(ag, 
+        LET(
+            dossiers_agence, FILTER(A2:F6, C2:C6=ag),
+            aléa, RANDARRAY(ROWS(dossiers_agence)),
+            TAKE(SORTBY(dossiers_agence, aléa), 1)  // 1 dossier par agence
+        )
+    )),
+    échantillon
+)</code></pre>
+
+    <p>Cette formule avancée :</p>
+    <ol>
+        <li>Identifie toutes les agences uniques dans la base</li>
+        <li>Pour chaque agence, filtre les dossiers correspondants</li>
+        <li>Sélectionne aléatoirement 1 dossier par agence</li>
+        <li>Combine tous ces dossiers en un seul échantillon de contrôle</li>
+    </ol>
+
+    <h3>3.3 Échantillonnage basé sur le risque</h3>
+
+    <p>Pour orienter votre contrôle permanent en fonction du risque, vous pouvez combiner filtrage et échantillonnage :</p>
+
+    <pre><code>=LET(
+    # D'abord sélection de tous les dossiers à risque élevé
+    dossiers_risque_élevé, FILTER(A2:F6, F2:F6="Élevé"),
+    
+    # Ensuite sélection aléatoire parmi les dossiers à risque modéré
+    dossiers_risque_modéré, FILTER(A2:F6, F2:F6="Modéré"),
+    aléa_modéré, RANDARRAY(ROWS(dossiers_risque_modéré)),
+    échantillon_modéré, TAKE(SORTBY(dossiers_risque_modéré, aléa_modéré), 1),
+    
+    # Combinaison des deux sélections
+    VSTACK(dossiers_risque_élevé, échantillon_modéré)
+)</code></pre>
+
+    <p>Cette approche permet de contrôler systématiquement tous les dossiers à risque élevé, complétés par un échantillon représentatif des dossiers à risque modéré.</p>
+
+    <h2>4. Cas pratiques adaptés au contrôle permanent</h2>
+
+    <h3>4.1 Suivi des dossiers hors norme</h3>
+
+    <p>Imaginons que vous souhaitiez identifier les dossiers clients qui s'écartent significativement des moyennes de leur agence :</p>
+
+    <pre><code>=LET(
+    base, A2:F6,
+    agences, UNIQUE(C2:C6),
+    
+    # Calcul de la moyenne par agence
+    moyennes_agence, MAP(agences, LAMBDA(ag, 
+        AVERAGE(FILTER(D2:D6, C2:C6=ag))
+    )),
+    
+    # Création d'un tableau associant chaque agence à sa moyenne
+    tableau_moyennes, HSTACK(agences, moyennes_agence),
+    
+    # Filtrage des dossiers dépassant 150% de la moyenne de leur agence
+    résultats, FILTER(base, 
+        LET(
+            ligne, SEQUENCE(ROWS(base)),
+            agence_client, INDEX(base, ligne, 3),
+            montant_client, INDEX(base, ligne, 4),
+            moyenne_applicable, XLOOKUP(agence_client, tableau_moyennes[1], tableau_moyennes[2]),
+            montant_client > 1.5 * moyenne_applicable
+        )
+    ),
+    
+    résultats
+)</code></pre>
+
+    <p>Cette formule avancée utilise plusieurs fonctionnalités :</p>
+    <ol>
+        <li>Calcule la moyenne des montants pour chaque agence</li>
+        <li>Crée un tableau de référence associant agences et moyennes</li>
+        <li>Pour chaque client, compare son montant à 150% de la moyenne de son agence</li>
+        <li>Ne conserve que les dossiers dépassant ce seuil</li>
+    </ol>
+
+    <h3>4.2 Tableau de bord de contrôle avec paramètres dynamiques</h3>
+
+    <p>Pour faciliter le travail quotidien de l'équipe de contrôle permanent, créons un tableau de bord où l'utilisateur peut définir ses propres critères :</p>
+
+    <table>
+        <tr>
+            <th>H1</th>
+            <th>I1</th>
+        </tr>
+        <tr>
+            <td>Agence</td>
+            <td>[Liste déroulante]</td>
+        </tr>
+        <tr>
+            <td>Montant min</td>
+            <td>[Valeur saisie]</td>
+        </tr>
+        <tr>
+            <td>Niveau risque</td>
+            <td>[Liste déroulante]</td>
+        </tr>
+    </table>
+
+    <pre><code>=LET(
+    base, A2:F6,
+    critère_agence, SI(I1="Toutes", VRAI(), C2:C6=I1),
+    critère_montant, D2:D6>=I2,
+    critère_risque, SI(I3="Tous", VRAI(), F2:F6=I3),
+    
+    # Application des filtres selon paramètres choisis
+    résultat, FILTER(base,
+        critère_agence * critère_montant * critère_risque,
+        "Aucun dossier ne correspond aux critères sélectionnés"
+    ),
+    
+    # Tri du résultat par montant décroissant
+    SORTBY(résultat, 4, -1)
+)</code></pre>
+
+    <p>Ce tableau de bord permet à chaque contrôleur de :</p>
+    <ul>
+        <li>Filtrer dynamiquement la base selon l'agence, le montant minimum et le niveau de risque</li>
+        <li>Visualiser immédiatement les résultats triés par ordre d'importance (montant décroissant)</li>
+        <li>Adapter rapidement ses critères de contrôle en fonction des besoins du moment</li>
+    </ul>
+
+    <h3>4.3 Suivi des anomalies temporelles</h3>
+
+    <p>Pour détecter les dossiers présentant des dates de signature inhabituelles (weekends ou jours fériés) :</p>
+
+    <pre><code>=LET(
+    base, A2:F6,
+    
+    # Identification des weekends
+    jours_semaine, WEEKDAY(E2:E6),
+    est_weekend, (jours_semaine=1)+(jours_semaine=7),  # 1=dimanche, 7=samedi
+    
+    # Liste simplifiée des jours fériés 2024
+    jours_fériés, {DATE(2024,1,1); DATE(2024,4,1); DATE(2024,5,1); 
+                   DATE(2024,5,8); DATE(2024,5,9); DATE(2024,7,14);
+                   DATE(2024,8,15); DATE(2024,11,1); DATE(2024,11,11);
+                   DATE(2024,12,25)},
+    
+    # Vérification si date contrat est férié
+    est_férié, MAP(E2:E6, LAMBDA(date, 
+        SI(TROUVER.TOUT(date, jours_fériés), VRAI, FAUX)
+    )),
+    
+    # Sélection des dossiers signés pendant weekend ou jour férié
+    FILTER(base, est_weekend + est_férié,
+        "Tous les contrats ont été signés pendant des jours ouvrés")
+)</code></pre>
+
+    <p>Cette formule identifie les dossiers potentiellement problématiques qui pourraient justifier un contrôle approfondi.</p>
+
+    <h2>5. Récapitulatif et astuces pour l'équipe</h2>
+
+    <h3>5.1 Progression recommandée pour maîtriser FILTER</h3>
+
+    <table>
+        <tr>
+            <th>Niveau</th>
+            <th>Compétences à acquérir</th>
+            <th>Application au contrôle permanent</th>
+        </tr>
+        <tr>
+            <td>Débutant</td>
+            <td>Filtrage simple, message par défaut</td>
+            <td>Sélection de dossiers par agence ou critère unique</td>
+        </tr>
+        <tr>
+            <td>Intermédiaire</td>
+            <td>Opérateurs ET/OU, combinaison de critères</td>
+            <td>Création de populations de contrôle selon critères métier</td>
+        </tr>
+        <tr>
+            <td>Avancé</td>
+            <td>Utilisation de LET, LAMBDA, fonctions de tableau</td>
+            <td>Construction d'échantillons stratifiés et analyse de risque</td>
+        </tr>
+        <tr>
+            <td>Expert</td>
+            <td>Tableaux de bord dynamiques, analyse statistique</td>
+            <td>Optimisation du processus de contrôle permanent et reporting</td>
+        </tr>
+    </table>
+
+    <h3>5.2 Bonnes pratiques spécifiques au contrôle permanent</h3>
+
+    <ol>
+        <li><strong>Documentez vos formules</strong> en utilisant des commentaires clairs ou la fonction LET pour nommer les variables intermédiaires</li>
+        <li><strong>Créez des noms de plages standards</strong> pour votre équipe (ex: BaseClients, RéférentielsRisques)</li>
+        <li><strong>Archivez vos échantillons de contrôle</strong> en copiant les résultats des formules FILTER avec "Collage spécial > Valeurs"</li>
+        <li><strong>Centralisez les paramètres de contrôle</strong> dans une zone dédiée du classeur pour faciliter la traçabilité des contrôles</li>
+        <li><strong>Standardisez vos formules</strong> au sein de l'équipe pour faciliter la revue par les pairs et le transfert de connaissances</li>
+    </ol>
+
+    <h3>5.3 Limitations et solutions alternatives</h3>
+
+    <div class="warning">
+        <p><strong>Points d'attention</strong> :</p>
+        <ul>
+            <li>FILTER peut ralentir Excel si appliqué sur de très grandes bases de données (>100 000 lignes)</li>
+            <li>Les résultats de FILTER sont dynamiques et se mettent à jour automatiquement, ce qui peut parfois être indésirable pour la traçabilité des contrôles</li>
+            <li>Les formules complexes avec FILTER peuvent être difficiles à déboguer</li>
+        </ul>
+    </div>
+
+    <p><strong>Solutions alternatives selon les cas :</strong></p>
+    <ul>
+        <li>Pour les très grandes bases de données : utiliser Power Query ou filtrer d'abord la base en amont</li>
+        <li>Pour garantir la traçabilité : capturer les résultats avec "Collage spécial > Valeurs" après chaque contrôle</li>
+        <li>Pour les versions d'Excel antérieures : combiner INDEX et MATCH avec des colonnes auxiliaires</li>
+    </ul>
+
+    <h3>5.4 Mise en place progressive dans l'équipe</h3>
+
+    <p>Pour faciliter l'adoption de FILTER au sein de votre équipe de contrôle permanent :</p>
+    
+    <ol>
+        <li><strong>Commencez petit</strong> : remplacez d'abord les filtres manuels simples avant de passer aux formules complexes</li>
+        <li><strong>Créez une bibliothèque de formules</strong> adaptées à vos cas d'usage les plus fréquents</li>
+        <li><strong>Organisez des sessions de partage</strong> où chaque membre peut présenter une utilisation efficace de FILTER</li>
+        <li><strong>Standardisez la structure de vos données</strong> pour faciliter l'application cohérente des formules FILTER</li>
+    </ol>
+
+    <hr>
+
+    <p>Ce tutoriel vous a présenté comment exploiter la puissance de la fonction FILTER pour transformer votre approche du contrôle permanent. En maîtrisant cette fonction, vous pourrez passer efficacement d'une base de données complète à une population ciblée, puis à un échantillon de contrôle précis, le tout en conservant la traçabilité nécessaire à votre activité. Les techniques présentées vous permettront d'optimiser votre processus de contrôle et d'adapter vos analyses aux exigences réglementaires et aux risques spécifiques de votre périmètre.</p>
+</body>
+</html>
