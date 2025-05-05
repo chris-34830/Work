@@ -1,0 +1,23 @@
+=LET(
+    id;     DonneesBrutes!A2:A1000;
+    age;    DonneesBrutes!B2:B1000;
+    sexe;   DonneesBrutes!C2:C1000;
+    poids;  DonneesBrutes!D2:D1000;
+    taille; DonneesBrutes!E2:E1000;
+
+    lignes_valides; (age<>"")*(poids<>"")*(taille<>"");
+
+    donnees_propres;
+        FILTER(
+            HSTACK(
+                id; age; sexe; poids; taille;
+                poids/(taille^2)          /* IMC */
+            );
+            lignes_valides
+        );
+
+    /* UNIQUE avec 3ᵉ arg =TRUE conserve la 1ʳᵉ occurrence après tri ↓ */
+    resultat; UNIQUE( SORT(donnees_propres;1;-1); ; TRUE );
+
+    resultat
+)
