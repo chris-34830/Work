@@ -1,0 +1,475 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tutoriel : La puissance de LET pour transformer vos données</title>
+    <style>
+        body {
+            font-family: 'Calibri', sans-serif;
+            line-height: 1.6;
+            color: #333;
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: #f9f9f9;
+        }
+        h1 {
+            color: #2D5B8E;
+            border-bottom: 2px solid #2D5B8E;
+            padding-bottom: 10px;
+            text-align: center;
+            margin-bottom: 30px;
+        }
+        h2 {
+            color: #2D5B8E;
+            margin-top: 35px;
+            border-left: 4px solid #2D5B8E;
+            padding-left: 10px;
+            background-color: #f0f7ff;
+            padding: 8px 10px;
+            border-radius: 0 5px 5px 0;
+        }
+        h3 {
+            color: #2D5B8E;
+            margin-top: 25px;
+        }
+        .highlight {
+            background-color: #f5f7fa;
+            padding: 15px;
+            border-left: 4px solid #2D5B8E;
+            margin: 15px 0;
+            border-radius: 0 5px 5px 0;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        .function {
+            color: #0070C0;
+            font-weight: bold;
+            font-family: 'Consolas', monospace;
+        }
+        .variable {
+            color: #7030A0;
+            font-style: italic;
+            font-family: 'Consolas', monospace;
+        }
+        .operator {
+            color: #C00000;
+            font-family: 'Consolas', monospace;
+        }
+        .comment {
+            color: #008000;
+            font-family: 'Consolas', monospace;
+        }
+        code {
+            font-family: 'Consolas', monospace;
+            background-color: #f5f7fa;
+            padding: 2px 4px;
+            border-radius: 3px;
+        }
+        pre {
+            background-color: #f5f7fa;
+            padding: 15px;
+            overflow-x: auto;
+            border-radius: 5px;
+            border: 1px solid #ddd;
+            box-shadow: inset 0 0 5px rgba(0,0,0,0.1);
+            line-height: 1.4;
+        }
+        table {
+            border-collapse: collapse;
+            width: 100%;
+            margin: 20px 0;
+            background-color: white;
+            box-shadow: 0 2px 3px rgba(0,0,0,0.1);
+        }
+        th, td {
+            border: 1px solid #ddd;
+            padding: 10px;
+            text-align: left;
+        }
+        th {
+            background-color: #e6f0ff;
+            color: #2D5B8E;
+        }
+        tr:nth-child(even) {
+            background-color: #f9f9f9;
+        }
+        .tip {
+            background-color: #E8F4F8;
+            padding: 15px;
+            border-left: 4px solid #5BC0DE;
+            margin: 15px 0;
+            border-radius: 0 5px 5px 0;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        .warning {
+            background-color: #FFF8E8;
+            padding: 15px;
+            border-left: 4px solid #F0AD4E;
+            margin: 15px 0;
+            border-radius: 0 5px 5px 0;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        .formula {
+            font-family: 'Consolas', monospace;
+            background-color: #f0f7ff;
+            padding: 15px;
+            border-radius: 5px;
+            margin: 15px 0;
+            border: 1px solid #c7d7eb;
+            white-space: pre-wrap;
+            line-height: 1.5;
+            box-shadow: inset 0 0 5px rgba(0,0,0,0.05);
+        }
+        .steps {
+            background-color: #f9f9f9;
+            padding: 15px;
+            border-radius: 5px;
+            margin: 15px 0;
+            border-left: 4px solid #6c757d;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        .section {
+            background-color: white;
+            padding: 25px;
+            margin: 30px 0;
+            border-radius: 8px;
+            box-shadow: 0 3px 10px rgba(0,0,0,0.1);
+        }
+        .difficulty-level {
+            background-color: #e6f0ff;
+            color: #2D5B8E;
+            display: inline-block;
+            padding: 5px 15px;
+            border-radius: 20px;
+            font-weight: bold;
+            margin-bottom: 15px;
+        }
+        .use-case {
+            background-color: #f0f7ff;
+            padding: 10px 15px;
+            border-radius: 5px;
+            margin-bottom: 20px;
+            border-left: 3px solid #5BC0DE;
+        }
+    </style>
+</head>
+<body>
+    <h1>La Puissance de LET pour Transformer vos Données dans Excel</h1>
+
+    <div class="section">
+        <h2>Qu'est-ce que la fonction LET et pourquoi l'utiliser ?</h2>
+        
+        <p>La fonction <span class="function">LET</span> est une puissante nouveauté d'Excel 365/2021 qui transforme la façon dont nous manipulons les données complexes. Elle permet de créer des variables nommées au sein d'une formule, rendant les calculs plus clairs et plus efficaces.</p>
+
+        <div class="highlight">
+            <p><strong>La syntaxe de base de <span class="function">LET</span> est :</strong></p>
+            <div class="formula"><span class="operator">=</span><span class="function">LET</span>(<span class="variable">nom1</span>, <span class="variable">valeur1</span>, <span class="variable">nom2</span>, <span class="variable">valeur2</span>, ..., <span class="variable">calcul_final</span>)</div>
+            <p>Où :</p>
+            <ul>
+                <li><code><span class="variable">nom1</span></code>, <code><span class="variable">nom2</span></code>, etc. sont vos noms de variables personnalisés</li>
+                <li><code><span class="variable">valeur1</span></code>, <code><span class="variable">valeur2</span></code>, etc. sont les valeurs attribuées à ces variables</li>
+                <li>Le dernier argument est le calcul qui utilise ces variables nommées</li>
+            </ul>
+        </div>
+
+        <h3>Les avantages d'utiliser <span class="function">LET</span> pour le traitement de données :</h3>
+        <ul>
+            <li><strong>Clarté</strong> - Des formules complexes deviennent faciles à comprendre</li>
+            <li><strong>Efficacité</strong> - Excel n'évalue chaque variable qu'une seule fois</li>
+            <li><strong>Organisation</strong> - Construction de traitements en étapes séquentielles claires</li>
+            <li><strong>Autonomie</strong> - Tout se déroule dans une seule formule sans colonnes intermédiaires</li>
+            <li><strong>Maintenance</strong> - Modifications faciles grâce aux variables nommées</li>
+        </ul>
+    </div>
+
+    <div class="section">
+        <div class="difficulty-level">Utilisation simple</div>
+        <h2>Les premiers pas avec LET</h2>
+
+        <div class="use-case">
+            <p><strong>Cas d'utilisation :</strong> Vous avez une base de données de participants et vous souhaitez identifier et compter les adultes.</p>
+        </div>
+
+        <h3>Voici à quoi ressemblent vos données :</h3>
+        <table>
+            <tr>
+                <th>A</th>
+                <th>B</th>
+                <th>C</th>
+                <th>D</th>
+                <th>E</th>
+            </tr>
+            <tr>
+                <th>ID</th>
+                <th>Âge</th>
+                <th>Sexe</th>
+                <th>Poids</th>
+                <th>Taille</th>
+            </tr>
+            <tr>
+                <td>1001</td>
+                <td>24</td>
+                <td>F</td>
+                <td>65</td>
+                <td>1.68</td>
+            </tr>
+            <tr>
+                <td>1002</td>
+                <td>17</td>
+                <td>M</td>
+                <td>70</td>
+                <td>1.75</td>
+            </tr>
+            <tr>
+                <td>...</td>
+                <td>...</td>
+                <td>...</td>
+                <td>...</td>
+                <td>...</td>
+            </tr>
+        </table>
+
+        <h3>1. Approche traditionnelle</h3>
+        <p>Sans <span class="function">LET</span>, vous feriez :</p>
+        <div class="formula"><span class="operator">=</span><span class="function">NB.SI</span>(DonneesBrutes!B2:B1000; "<span class="operator">>=</span>18")</div>
+
+        <h3>2. Avec <span class="function">LET</span> - Plus clair et réutilisable</h3>
+        <p>En utilisant <span class="function">LET</span>, la formule devient :</p>
+        <div class="formula"><span class="operator">=</span><span class="function">LET</span>(
+    <span class="variable">ages</span>, DonneesBrutes!B2:B1000,
+    <span class="function">NB.SI</span>(<span class="variable">ages</span>, "<span class="operator">>=</span>18")
+)</div>
+
+        <div class="tip">
+            <p><strong>Astuce pratique :</strong> <span class="function">LET</span> peut remplacer les plages nommées quand vous souhaitez que tout reste dans la cellule. C'est particulièrement utile lors du partage de classeurs avec d'autres personnes.</p>
+        </div>
+
+        <h3>3. Analyse multiple avec <span class="function">LET</span></h3>
+        <p>Le véritable avantage apparaît lorsque vous effectuez plusieurs opérations sur les mêmes données :</p>
+        <div class="formula"><span class="operator">=</span><span class="function">LET</span>(
+    <span class="variable">ages</span>, DonneesBrutes!B2:B1000,
+    <span class="variable">nb_adultes</span>, <span class="function">NB.SI</span>(<span class="variable">ages</span>, "<span class="operator">>=</span>18"),
+    <span class="variable">nb_mineurs</span>, <span class="function">NB.SI</span>(<span class="variable">ages</span>, "<span class="operator"><</span>18"),
+    "Adultes : " <span class="operator">&</span> <span class="variable">nb_adultes</span> <span class="operator">&</span> ", Mineurs : " <span class="operator">&</span> <span class="variable">nb_mineurs</span> <span class="operator">&</span> ", Ratio : " <span class="operator">&</span> <span class="variable">nb_adultes</span><span class="operator">/</span><span class="variable">nb_mineurs</span>
+)</div>
+
+        <p>Remarquez que nous n'avons référencé la plage <code><span class="variable">ages</span></code> qu'une seule fois, mais l'avons utilisée plusieurs fois dans nos calculs. Cela améliore les performances et facilite la maintenance de la formule.</p>
+    </div>
+
+    <div class="section">
+        <div class="difficulty-level">Utilisation intermédiaire</div>
+        <h2>Nettoyage de données et création d'une population d'étude</h2>
+
+        <div class="use-case">
+            <p><strong>Cas d'utilisation :</strong> Vous devez préparer un ensemble de données propre pour l'analyse en filtrant les enregistrements incomplets et en ajoutant des calculs dérivés.</p>
+        </div>
+
+        <h3>Voici ce que nous voulons faire :</h3>
+        <ol>
+            <li>Filtrer les enregistrements incomplets (âge, poids ou taille manquants)</li>
+            <li>Calculer l'IMC pour chaque participant</li>
+            <li>Supprimer les doublons d'ID, en gardant l'entrée la plus récente</li>
+            <li>Obtenir un ensemble de données propre pour l'analyse</li>
+        </ol>
+
+        <div class="formula"><span class="operator">=</span><span class="function">LET</span>(
+    <span class="comment">/* Définition des variables pour chaque colonne */</span>
+    <span class="variable">id</span>, DonneesBrutes!A2:A1000,
+    <span class="variable">age</span>, DonneesBrutes!B2:B1000,
+    <span class="variable">sexe</span>, DonneesBrutes!C2:C1000,
+    <span class="variable">poids</span>, DonneesBrutes!D2:D1000,
+    <span class="variable">taille</span>, DonneesBrutes!E2:E1000,
+    
+    <span class="comment">/* Étape 1 : Identifier les lignes avec données complètes */</span>
+    <span class="variable">lignes_valides</span>, (<span class="variable">age</span><span class="operator"><></span>"")<span class="operator">*</span>(<span class="variable">poids</span><span class="operator"><></span>"")<span class="operator">*</span>(<span class="variable">taille</span><span class="operator"><></span>""),
+    
+    <span class="comment">/* Étape 2 : Filtrer et ajouter la colonne IMC calculée */</span>
+    <span class="variable">donnees_propres</span>, <span class="function">FILTER</span>(
+        <span class="function">CHOOSE</span>({1;2;3;4;5;6},
+            <span class="variable">id</span>, <span class="variable">age</span>, <span class="variable">sexe</span>, <span class="variable">poids</span>, <span class="variable">taille</span>,
+            <span class="variable">poids</span><span class="operator">/</span>(<span class="variable">taille</span><span class="operator">^</span>2)  <span class="comment">/* Calcul de l'IMC */</span>
+        ),
+        <span class="variable">lignes_valides</span>
+    ),
+    
+    <span class="comment">/* Étape 3 : Trier par ID (supposant que les ID plus récents sont plus grands) */</span>
+    <span class="variable">donnees_triees</span>, <span class="function">SORT</span>(<span class="variable">donnees_propres</span>, 1, -1),
+    
+    <span class="comment">/* Étape 4 : Supprimer les doublons, garder la première occurrence */</span>
+    <span class="function">FILTER</span>(
+        <span class="variable">donnees_triees</span>,
+        <span class="function">COUNTIFS</span>(
+            <span class="function">SEQUENCE</span>(<span class="function">ROWS</span>(<span class="variable">donnees_triees</span>)), "<span class="operator"><=</span>"<span class="operator">&</span><span class="function">SEQUENCE</span>(<span class="function">ROWS</span>(<span class="variable">donnees_triees</span>)),
+            <span class="function">INDEX</span>(<span class="variable">donnees_triees</span>,,1), <span class="function">INDEX</span>(<span class="variable">donnees_triees</span>,<span class="function">SEQUENCE</span>(<span class="function">ROWS</span>(<span class="variable">donnees_triees</span>)),1)
+        )<span class="operator">=</span>1
+    )
+)</div>
+
+        <div class="steps">
+            <p><strong>Comprendre le processus étape par étape :</strong></p>
+            <ol>
+                <li>Nous définissons des variables claires pour chaque colonne de données</li>
+                <li>Nous créons un indicateur <code><span class="variable">lignes_valides</span></code> pour identifier les enregistrements complets</li>
+                <li>Nous filtrons les données et ajoutons une colonne IMC avec <span class="function">CHOOSE</span></li>
+                <li>Nous trions par ID décroissant pour que les entrées récentes apparaissent en premier</li>
+                <li>Nous supprimons les doublons en gardant uniquement la première occurrence de chaque ID</li>
+            </ol>
+        </div>
+
+        <div class="warning">
+            <p><strong>Attention :</strong> Cette formule suppose que les ID plus élevés correspondent aux enregistrements plus récents. Si ce n'est pas le cas, vous devriez adapter la logique de tri.</p>
+        </div>
+
+        <h3>Enrichir votre population avec des variables dérivées</h3>
+        <p>Ajoutons une catégorie d'IMC pour chaque participant :</p>
+
+        <div class="formula"><span class="operator">=</span><span class="function">LET</span>(
+    <span class="comment">/* Variables précédentes... */</span>
+    
+    <span class="comment">/* Après avoir créé donnees_propres avec l'IMC en colonne 6 */</span>
+    <span class="variable">avec_imc</span>, <span class="variable">donnees_propres</span>,
+    
+    <span class="comment">/* Ajouter la catégorie d'IMC comme colonne 7 */</span>
+    <span class="variable">donnees_completes</span>, <span class="function">MAP</span>(
+        <span class="variable">avec_imc</span>,
+        <span class="function">LAMBDA</span>(<span class="variable">ligne</span>,
+            <span class="function">LET</span>(
+                <span class="variable">imc</span>, <span class="function">INDEX</span>(<span class="variable">ligne</span>, 6),
+                <span class="variable">categorie_imc</span>, 
+                <span class="function">SI</span>(<span class="variable">imc</span><span class="operator"><</span>18.5, "Sous-poids",
+                  <span class="function">SI</span>(<span class="variable">imc</span><span class="operator"><</span>25, "Normal",
+                    <span class="function">SI</span>(<span class="variable">imc</span><span class="operator"><</span>30, "Surpoids", "Obésité")
+                  )
+                ),
+                <span class="function">HSTACK</span>(<span class="variable">ligne</span>, <span class="variable">categorie_imc</span>)
+            )
+        )
+    ),
+    
+    <span class="comment">/* Continuer avec la suppression des doublons comme précédemment... */</span>
+    <span class="variable">donnees_completes</span>
+)</div>
+
+        <p>Cette approche démontre comment <span class="function">LET</span> nous permet de construire des transformations de données complexes, étape par étape, tout en gardant chaque partie claire et compréhensible.</p>
+    </div>
+
+    <div class="section">
+        <div class="difficulty-level">Utilisation avancée</div>
+        <h2>Création de fonctions d'échantillonnage réutilisables</h2>
+
+        <div class="use-case">
+            <p><strong>Cas d'utilisation :</strong> Vous devez créer des échantillons aléatoires ou stratifiés à partir de votre population d'étude pour différentes analyses.</p>
+        </div>
+
+        <h3>1. Créer une fonction d'échantillonnage aléatoire</h3>
+        <p>Dans le Gestionnaire de noms (ou directement dans une cellule), créez cette fonction :</p>
+
+        <div class="formula"><span class="variable">EchantillonAleatoire</span> :=
+<span class="function">LAMBDA</span>(<span class="variable">donnees</span>, <span class="variable">pourcentage_echantillon</span>,
+    <span class="function">LET</span>(
+        <span class="variable">nb_lignes</span>, <span class="function">ROWS</span>(<span class="variable">donnees</span>),
+        <span class="variable">taille_echantillon</span>, <span class="function">ROUND</span>(<span class="variable">nb_lignes</span> <span class="operator">*</span> <span class="variable">pourcentage_echantillon</span>, 0),
+        <span class="variable">indices_aleatoires</span>, <span class="function">SORTBY</span>(<span class="function">SEQUENCE</span>(<span class="variable">nb_lignes</span>), <span class="function">RANDARRAY</span>(<span class="variable">nb_lignes</span>)),
+        <span class="function">TAKE</span>(<span class="function">INDEX</span>(<span class="variable">donnees</span>, <span class="variable">indices_aleatoires</span>, ), <span class="variable">taille_echantillon</span>)
+    )
+)</div>
+
+        <h3>2. Utiliser cette fonction</h3>
+        <p>Une fois définie, vous pouvez l'utiliser pour obtenir un échantillon aléatoire de 10% :</p>
+
+        <div class="formula"><span class="operator">=</span><span class="function">EchantillonAleatoire</span>(<span class="variable">PopulationPropre</span>, 0.1)</div>
+
+        <h3>3. Créer une fonction d'échantillonnage stratifié</h3>
+        <p>Pour des analyses plus avancées, vous pourriez avoir besoin de préserver les proportions de certains groupes :</p>
+
+        <div class="formula"><span class="variable">EchantillonStratifie</span> :=
+<span class="function">LAMBDA</span>(<span class="variable">donnees</span>, <span class="variable">col_strat</span>, <span class="variable">pourcentage_echantillon</span>,
+    <span class="function">LET</span>(
+        <span class="variable">strates_uniques</span>, <span class="function">UNIQUE</span>(<span class="function">INDEX</span>(<span class="variable">donnees</span>, , <span class="variable">col_strat</span>)),
+        <span class="variable">nb_strates</span>, <span class="function">ROWS</span>(<span class="variable">strates_uniques</span>),
+        
+        <span class="comment">/* Créer des échantillons pour chaque strate */</span>
+        <span class="variable">echantillons</span>, <span class="function">MAP</span>(
+            <span class="function">SEQUENCE</span>(<span class="variable">nb_strates</span>),
+            <span class="function">LAMBDA</span>(<span class="variable">i</span>,
+                <span class="function">LET</span>(
+                    <span class="variable">strate</span>, <span class="function">INDEX</span>(<span class="variable">strates_uniques</span>, <span class="variable">i</span>),
+                    <span class="variable">donnees_strate</span>, <span class="function">FILTER</span>(<span class="variable">donnees</span>, <span class="function">INDEX</span>(<span class="variable">donnees</span>, , <span class="variable">col_strat</span>) = <span class="variable">strate</span>),
+                    <span class="function">EchantillonAleatoire</span>(<span class="variable">donnees_strate</span>, <span class="variable">pourcentage_echantillon</span>)
+                )
+            )
+        ),
+        
+        <span class="comment">/* Combiner tous les échantillons */</span>
+        <span class="function">VSTACK</span>(<span class="variable">echantillons</span>)
+    )
+)</div>
+
+        <p>Maintenant, vous pouvez créer un échantillon stratifié par sexe :</p>
+
+        <div class="formula"><span class="operator">=</span><span class="function">EchantillonStratifie</span>(<span class="variable">PopulationPropre</span>, 3, 0.1)  <span class="comment">/* Si le sexe est en colonne 3 */</span></div>
+    </div>
+
+    <div class="section">
+        <h2>Pipeline complet : De données brutes à l'échantillon final</h2>
+
+        <p>La vraie puissance de <span class="function">LET</span> apparaît lorsque vous combinez toutes ces étapes en un processus complet :</p>
+
+        <div class="formula"><span class="operator">=</span><span class="function">LET</span>(
+    <span class="comment">/* Extraction des données brutes */</span>
+    <span class="variable">donnees_brutes</span>, DonneesBrutes!A2:E1000,
+    
+    <span class="comment">/* Nettoyage et préparation de la population */</span>
+    <span class="variable">population_propre</span>, <span class="function">LET</span>(
+        <span class="comment">/* Code de nettoyage précédent */</span>
+        <span class="variable">resultat_du_nettoyage</span>
+    ),
+    
+    <span class="comment">/* Créer un échantillon stratifié */</span>
+    <span class="variable">echantillon_final</span>, <span class="function">EchantillonStratifie</span>(<span class="variable">population_propre</span>, 3, 0.15),
+    
+    <span class="comment">/* Renvoyer l'échantillon final */</span>
+    <span class="variable">echantillon_final</span>
+)</div>
+
+        <p>Cette approche crée un flux de travail complet de transformation des données, tout en restant dans une seule formule, avec des étapes clairement définies.</p>
+    </div>
+
+    <div class="section">
+        <div class="difficulty-level">Applications pratiques</div>
+        <h2>Techniques avancées pour la recherche</h2>
+
+        <h3>Application des critères d'inclusion/exclusion</h3>
+        <p>Pour la recherche scientifique, vous devez souvent appliquer des critères spécifiques :</p>
+
+        <div class="formula"><span class="operator">=</span><span class="function">LET</span>(
+    <span class="comment">/* Données de base */</span>
+    <span class="variable">id</span>, DonneesBrutes!A2:A1000,
+    <span class="variable">age</span>, DonneesBrutes!B2:B1000,
+    <span class="variable">sexe</span>, DonneesBrutes!C2:C1000,
+    <span class="variable">poids</span>, DonneesBrutes!D2:D1000,
+    <span class="variable">taille</span>, DonneesBrutes!E2:E1000,
+    <span class="variable">diabete</span>, DonneesBrutes!F2:F1000,
+    
+    <span class="comment">/* Critères d'inclusion */</span>
+    <span class="variable">inclusion</span>, (<span class="variable">age</span><span class="operator">>=</span>18)<span class="operator">*</span>(<span class="variable">age</span><span class="operator"><=</span>65)<span class="operator">*</span>(<span class="variable">taille</span><span class="operator">></span>0)<span class="operator">*</span>(<span class="variable">poids</span><span class="operator">></span>0),
+    
+    <span class="comment">/* Critères d'exclusion */</span>
+    <span class="variable">exclusion</span>, (<span class="variable">diabete</span>="Oui"),
+    
+    <span class="comment">/* Éligibilité finale */</span>
+    <span class="variable">eligible</span>, <span class="variable">inclusion</span> <span class="operator">*</span> (1-<span class="variable">exclusion</span>),
+    
+    <span class="comment">/* Filtrer les participants éligibles */</span>
+    <span class="variable">population_etude</span>, <span class="function">FILTER</span>(
+        <span class="function">CHOOSE</span>({1;2;3;4;5},
+            <span class="variable">id</span>, <span class="variable">age</span>, <span class="variable">sexe</span>, <span class="variable">poids</span>, <span class="variable">taille</span>
+        ),
+        <span class="variable">eligible</span>
+    ),
+    
+    <span class="variable">population_etude</span>
+)</div>
+
+        <p>Cette approche permet de documenter clairement vos critères d'inclusion et d'exclusion directement
