@@ -7,19 +7,16 @@
 
     lignes_valides; (age<>"")*(poids<>"")*(taille<>"");
 
-    donnees_propres; FILTER(
-        CHOOSE({1\2\3\4\5\6};  id; age; sexe; poids; taille;  poids/(taille^2) );
-        lignes_valides
-    );
+    donnees_propres;
+        FILTER(
+            HSTACK(id; age; sexe; poids; taille; poids/(taille^2));
+            lignes_valides
+        );
 
     donnees_triees; SORT(donnees_propres; 1; -1);
 
-    /* garde la 1re occurrence de chaque ID */
-    FILTER(
-        donnees_triees;
-        COUNTIFS(
-            SEQUENCE(ROWS(donnees_triees)); "<="&SEQUENCE(ROWS(donnees_triees));
-            INDEX(donnees_triees;;1); INDEX(donnees_triees; SEQUENCE(ROWS(donnees_triees)); 1)
-        ) = 1
-    )
+    lignes;           SEQUENCE(ROWS(donnees_triees));
+    premiere_occ;     XMATCH(INDEX(donnees_triees;;1); INDEX(donnees_triees;;1));
+
+    FILTER(donnees_triees; premiere_occ = lignes)
 )
