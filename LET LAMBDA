@@ -1,0 +1,1010 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Guide Excel - Fonctions LET et LAMBDA</title>
+    <style>
+        :root {
+            --primary-color: #0057b8;
+            --secondary-color: #f8f9fa;
+            --accent-color: #e9ecef;
+            --text-color: #343a40;
+            --light-text: #6c757d;
+            --border-color: #dee2e6;
+            --success-color: #28a745;
+            --warning-color: #ffc107;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+            line-height: 1.6;
+            color: var(--text-color);
+            max-width: 1140px;
+            margin: 0 auto;
+            padding: 0 20px;
+            background-color: #fff;
+        }
+        
+        .header {
+            padding: 40px 0 30px;
+            text-align: center;
+            margin-bottom: 40px;
+            border-bottom: 1px solid var(--border-color);
+        }
+        
+        .header h1 {
+            font-size: 32px;
+            font-weight: 400;
+            margin-bottom: 10px;
+            color: var(--primary-color);
+        }
+        
+        .header p {
+            font-size: 18px;
+            color: var(--light-text);
+            max-width: 700px;
+            margin: 0 auto;
+        }
+        
+        .section {
+            margin-bottom: 50px;
+            padding-bottom: 20px;
+            border-bottom: 1px solid var(--border-color);
+        }
+        
+        h2 {
+            font-size: 26px;
+            font-weight: 500;
+            color: var(--primary-color);
+            margin-top: 30px;
+            margin-bottom: 20px;
+            padding-bottom: 10px;
+        }
+        
+        h3 {
+            font-size: 20px;
+            font-weight: 500;
+            color: var(--text-color);
+            margin-top: 25px;
+            margin-bottom: 15px;
+        }
+        
+        code {
+            background-color: #f7f7f9;
+            padding: 2px 4px;
+            border-radius: 3px;
+            font-family: Consolas, Monaco, 'Courier New', monospace;
+            font-size: 14px;
+            color: #d63384;
+        }
+        
+        .formula {
+            background-color: #f8f9fa;
+            padding: 15px;
+            border-left: 3px solid var(--primary-color);
+            margin: 20px 0;
+            font-family: Consolas, Monaco, 'Courier New', monospace;
+            font-size: 14px;
+            color: #212529;
+            border-radius: 0 4px 4px 0;
+            overflow-x: auto;
+        }
+        
+        table {
+            border-collapse: collapse;
+            width: 100%;
+            margin: 25px 0;
+            font-size: 15px;
+        }
+        
+        th, td {
+            border: 1px solid var(--border-color);
+            padding: 12px 15px;
+            text-align: left;
+        }
+        
+        th {
+            background-color: #f8f9fa;
+            font-weight: 500;
+            color: var(--text-color);
+        }
+        
+        tr:nth-child(even) {
+            background-color: #fdfdfd;
+        }
+        
+        .note {
+            background-color: #fff8e6;
+            padding: 15px 20px;
+            border-left: 4px solid var(--warning-color);
+            margin: 20px 0;
+            border-radius: 0 4px 4px 0;
+        }
+        
+        .example {
+            margin: 30px 0;
+            padding: 0;
+            background-color: #fff;
+        }
+        
+        .level-badge {
+            display: inline-block;
+            padding: 4px 10px;
+            background-color: var(--primary-color);
+            color: white;
+            border-radius: 30px;
+            font-size: 14px;
+            font-weight: 500;
+            margin-left: 10px;
+            opacity: 0.8;
+            vertical-align: middle;
+        }
+        
+        p {
+            margin: 15px 0;
+            line-height: 1.7;
+        }
+        
+        /* Responsive adjustments */
+        @media (max-width: 768px) {
+            body {
+                padding: 0 15px;
+            }
+            
+            .header {
+                padding: 30px 0 20px;
+            }
+            
+            .formula {
+                padding: 10px;
+                font-size: 13px;
+            }
+            
+            table {
+                font-size: 14px;
+            }
+            
+            th, td {
+                padding: 8px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>Les fonctions LET et LAMBDA dans Excel</h1>
+        <p>Guide pratique pour le traitement des bases de données clients dans le cadre du contrôle permanent LoD1</p>
+    </div>
+
+    <div class="section">
+        <h2>Introduction aux fonctions LET et LAMBDA</h2>
+        
+        <p>Les fonctions LET et LAMBDA sont des ajouts récents et puissants à Excel qui permettent d'améliorer considérablement l'efficacité du traitement des données, particulièrement utiles dans le contexte bancaire pour le contrôle permanent LoD1.</p>
+
+        <h3>La fonction LET</h3>
+        <p>La fonction LET permet de définir des variables nommées à utiliser dans une formule, ce qui rend les formules complexes plus lisibles et plus faciles à maintenir.</p>
+        <div class="formula">
+            =LET(nom1, valeur1, [nom2, valeur2, ...], formule_résultat)
+        </div>
+
+        <h3>La fonction LAMBDA</h3>
+        <p>La fonction LAMBDA permet de créer des fonctions personnalisées sans avoir à recourir au VBA, offrant ainsi une flexibilité accrue tout en restant dans l'environnement de formules Excel.</p>
+        <div class="formula">
+            =LAMBDA(paramètre1, [paramètre2, ...], formule)
+        </div>
+        
+        <div class="note">
+            <p><strong>Note importante :</strong> Ces fonctions sont disponibles dans Microsoft 365 et Excel pour le Web, mais pas dans les versions antérieures d'Excel.</p>
+        </div>
+    </div>
+
+    <div class="section">
+        <h2>Niveau 1 : Utilisation basique de LET <span class="level-badge">Débutant</span></h2>
+        
+        <p>Commençons par des exemples simples de la fonction LET pour comprendre son fonctionnement et ses avantages dans le traitement des données bancaires.</p>
+
+        <div class="example">
+            <h3>Exemple 1.1 : Nettoyage simple d'un ID client</h3>
+            <p>Suppression des espaces et standardisation des ID clients.</p>
+            <div class="formula">
+                =LET(
+                    id_brut, A2,
+                    id_sans_espace, SUBSTITUE(id_brut, " ", ""),
+                    id_majuscule, MAJUSCULE(id_sans_espace),
+                    id_majuscule
+                )
+            </div>
+            <p>Cette formule prend l'ID client (potentiellement mal formaté), supprime tous les espaces, puis convertit le résultat en majuscules pour assurer la cohérence dans la base de données.</p>
+            
+            <table>
+                <tr>
+                    <th>ID Client Original</th>
+                    <th>ID Client Nettoyé</th>
+                </tr>
+                <tr>
+                    <td>kc 12345</td>
+                    <td>KC12345</td>
+                </tr>
+                <tr>
+                    <td>ID-078 abc</td>
+                    <td>ID-078ABC</td>
+                </tr>
+                <tr>
+                    <td>BNP 987 654</td>
+                    <td>BNP987654</td>
+                </tr>
+            </table>
+        </div>
+
+        <div class="example">
+            <h3>Exemple 1.2 : Validation simple d'un code postal client</h3>
+            <p>Vérification que le code postal est au format attendu (5 chiffres en France).</p>
+            <div class="formula">
+                =LET(
+                    code_postal, B2,
+                    est_numerique, ESTNUM(code_postal),
+                    longueur_correcte, NBCAR(code_postal)=5,
+                    SI(ET(est_numerique, longueur_correcte), "Valide", "Non valide")
+                )
+            </div>
+            <p>Cette formule vérifie si le code postal est numérique et composé exactement de 5 caractères.</p>
+            
+            <table>
+                <tr>
+                    <th>Code Postal</th>
+                    <th>Statut</th>
+                </tr>
+                <tr>
+                    <td>75008</td>
+                    <td>Valide</td>
+                </tr>
+                <tr>
+                    <td>7500</td>
+                    <td>Non valide</td>
+                </tr>
+                <tr>
+                    <td>750AB</td>
+                    <td>Non valide</td>
+                </tr>
+            </table>
+        </div>
+
+        <div class="example">
+            <h3>Exemple 1.3 : Calcul du risque client basé sur le solde</h3>
+            <p>Attribution d'un niveau de risque selon le solde du compte client.</p>
+            <div class="formula">
+                =LET(
+                    solde, C2,
+                    limite_faible, 1000,
+                    limite_moyen, 10000,
+                    risque, SI(solde<limite_faible, "Élevé", SI(solde<limite_moyen, "Moyen", "Faible")),
+                    risque
+                )
+            </div>
+            <p>Cette formule attribue un niveau de risque en fonction du solde du compte : "Élevé" si le solde est inférieur à 1000 €, "Moyen" s'il est entre 1000 € et 10000 €, et "Faible" s'il est supérieur à 10000 €.</p>
+            
+            <table>
+                <tr>
+                    <th>ID Client</th>
+                    <th>Solde (€)</th>
+                    <th>Niveau de Risque</th>
+                </tr>
+                <tr>
+                    <td>KC12345</td>
+                    <td>750</td>
+                    <td>Élevé</td>
+                </tr>
+                <tr>
+                    <td>ID-078ABC</td>
+                    <td>5200</td>
+                    <td>Moyen</td>
+                </tr>
+                <tr>
+                    <td>BNP987654</td>
+                    <td>15000</td>
+                    <td>Faible</td>
+                </tr>
+            </table>
+        </div>
+    </div>
+
+    <div class="section">
+        <h2>Niveau 2 : Utilisation intermédiaire de LET <span class="level-badge">Intermédiaire</span></h2>
+        
+        <p>Passons à des cas d'utilisation plus avancés de la fonction LET pour le traitement des données bancaires.</p>
+
+        <div class="example">
+            <h3>Exemple 2.1 : Nettoyage et validation des IBAN</h3>
+            <p>Nettoyage et validation du format basique d'un IBAN.</p>
+            <div class="formula">
+                =LET(
+                    iban_brut, D2,
+                    iban_sans_espace, SUBSTITUE(iban_brut, " ", ""),
+                    longueur, NBCAR(iban_sans_espace),
+                    code_pays, GAUCHE(iban_sans_espace, 2),
+                    est_valide, ET(longueur>=15, longueur<=34, EXACT(code_pays, MAJUSCULE(code_pays))),
+                    SI(est_valide, iban_sans_espace, "IBAN non valide")
+                )
+            </div>
+            <p>Cette formule nettoie l'IBAN en supprimant les espaces, puis vérifie qu'il respecte les règles basiques : longueur entre 15 et 34 caractères et commençant par un code pays en majuscules.</p>
+            
+            <table>
+                <tr>
+                    <th>IBAN Original</th>
+                    <th>IBAN Nettoyé/Validé</th>
+                </tr>
+                <tr>
+                    <td>FR76 3000 1007 1600 0000 9454 234</td>
+                    <td>FR7630001007160000009454234</td>
+                </tr>
+                <tr>
+                    <td>DE89 3704 0044 0532 0130 00</td>
+                    <td>DE89370400440532013000</td>
+                </tr>
+                <tr>
+                    <td>fr12 123</td>
+                    <td>IBAN non valide</td>
+                </tr>
+            </table>
+        </div>
+
+        <div class="example">
+            <h3>Exemple 2.2 : Segmentation des clients par âge et solde</h3>
+            <p>Catégorisation des clients selon leur âge et leur solde pour des analyses ciblées.</p>
+            <div class="formula">
+                =LET(
+                    age, E2,
+                    solde, C2,
+                    seuil_age_jeune, 30,
+                    seuil_age_senior, 60,
+                    seuil_solde_bas, 5000,
+                    seuil_solde_haut, 50000,
+                    segment_age, SI(age<seuil_age_jeune, "Jeune", SI(age<seuil_age_senior, "Adulte", "Senior")),
+                    segment_solde, SI(solde<seuil_solde_bas, "Bas", SI(solde<seuil_solde_haut, "Moyen", "Élevé")),
+                    CONCATENER(segment_age, "-", segment_solde)
+                )
+            </div>
+            <p>Cette formule attribue un segment combiné basé sur l'âge et le solde du client, créant 9 segments possibles (Jeune-Bas, Jeune-Moyen, etc.)</p>
+            
+            <table>
+                <tr>
+                    <th>ID Client</th>
+                    <th>Âge</th>
+                    <th>Solde (€)</th>
+                    <th>Segment</th>
+                </tr>
+                <tr>
+                    <td>KC12345</td>
+                    <td>25</td>
+                    <td>2500</td>
+                    <td>Jeune-Bas</td>
+                </tr>
+                <tr>
+                    <td>ID-078ABC</td>
+                    <td>45</td>
+                    <td>35000</td>
+                    <td>Adulte-Moyen</td>
+                </tr>
+                <tr>
+                    <td>BNP987654</td>
+                    <td>68</td>
+                    <td>75000</td>
+                    <td>Senior-Élevé</td>
+                </tr>
+            </table>
+        </div>
+
+        <div class="example">
+            <h3>Exemple 2.3 : Création d'un identifiant unique de contrôle</h3>
+            <p>Génération d'un ID unique pour les besoins de contrôle à partir de plusieurs champs.</p>
+            <div class="formula">
+                =LET(
+                    client_id, A2,
+                    date_verif, F2,
+                    agent_id, G2,
+                    annee, ANNEE(date_verif),
+                    mois, TEXTE(MOIS(date_verif), "00"),
+                    jour, TEXTE(JOUR(date_verif), "00"),
+                    date_formatee, CONCATENER(annee, mois, jour),
+                    CONCATENER("CTR-", client_id, "-", date_formatee, "-", agent_id)
+                )
+            </div>
+            <p>Cette formule crée un identifiant unique pour chaque contrôle effectué, combinant l'ID client, la date formatée (AAAAMMJJ) et l'ID de l'agent qui effectue le contrôle.</p>
+            
+            <table>
+                <tr>
+                    <th>ID Client</th>
+                    <th>Date de Vérification</th>
+                    <th>ID Agent</th>
+                    <th>ID Contrôle</th>
+                </tr>
+                <tr>
+                    <td>KC12345</td>
+                    <td>15/04/2023</td>
+                    <td>AG001</td>
+                    <td>CTR-KC12345-20230415-AG001</td>
+                </tr>
+                <tr>
+                    <td>ID-078ABC</td>
+                    <td>23/05/2023</td>
+                    <td>AG007</td>
+                    <td>CTR-ID-078ABC-20230523-AG007</td>
+                </tr>
+                <tr>
+                    <td>BNP987654</td>
+                    <td>07/06/2023</td>
+                    <td>AG015</td>
+                    <td>CTR-BNP987654-20230607-AG015</td>
+                </tr>
+            </table>
+        </div>
+    </div>
+
+    <div class="section">
+        <h2>Niveau 3 : Introduction à LAMBDA <span class="level-badge">Avancé</span></h2>
+        
+        <p>Découvrons maintenant comment utiliser la fonction LAMBDA pour créer des fonctions personnalisées réutilisables.</p>
+
+        <div class="example">
+            <h3>Exemple 3.1 : Création d'une fonction de nettoyage d'ID client</h3>
+            <p>Définition d'une fonction LAMBDA pour standardiser les ID clients.</p>
+            <div class="formula">
+                <!-- Définir la fonction dans le gestionnaire de noms: -->
+                NettoyerID = LAMBDA(id, 
+                    LET(
+                        sans_espace, SUBSTITUE(id, " ", ""),
+                        sans_tiret, SUBSTITUE(sans_espace, "-", ""),
+                        MAJUSCULE(sans_tiret)
+                    )
+                )
+                
+                <!-- Utilisation dans la feuille: -->
+                =NettoyerID(A2)
+            </div>
+            <p>Cette formule crée une fonction personnalisée "NettoyerID" qui supprime les espaces et les tirets d'un ID client, puis convertit le résultat en majuscules. Une fois définie dans le gestionnaire de noms, elle peut être utilisée comme n'importe quelle fonction Excel.</p>
+            
+            <table>
+                <tr>
+                    <th>ID Client Original</th>
+                    <th>ID Client Nettoyé</th>
+                </tr>
+                <tr>
+                    <td>kc 12-345</td>
+                    <td>KC12345</td>
+                </tr>
+                <tr>
+                    <td>ID - 078 abc</td>
+                    <td>ID078ABC</td>
+                </tr>
+                <tr>
+                    <td>BNP-987-654</td>
+                    <td>BNP987654</td>
+                </tr>
+            </table>
+            
+            <div class="note">
+                <p><strong>Remarque :</strong> Pour utiliser cette fonction LAMBDA, vous devez d'abord la définir dans le Gestionnaire de noms d'Excel (Formules > Gestionnaire de noms).</p>
+            </div>
+        </div>
+
+        <div class="example">
+            <h3>Exemple 3.2 : Calcul du score de risque client</h3>
+            <p>Fonction LAMBDA pour calculer un score de risque basé sur plusieurs critères.</p>
+            <div class="formula">
+                <!-- Définir la fonction dans le gestionnaire de noms: -->
+                ScoreRisque = LAMBDA(solde, nb_incidents, anciennete,
+                    LET(
+                        score_solde, SI(solde<1000, 3, SI(solde<10000, 2, 1)),
+                        score_incidents, MIN(nb_incidents, 5),
+                        score_anciennete, SI(anciennete<1, 2, SI(anciennete<5, 1, 0)),
+                        score_total, score_solde + score_incidents + score_anciennete,
+                        niveau_risque, SI(score_total>7, "Très élevé", SI(score_total>5, "Élevé", SI(score_total>3, "Moyen", "Faible"))),
+                        CONCATENER(niveau_risque, " (", score_total, ")")
+                    )
+                )
+                
+                <!-- Utilisation dans la feuille: -->
+                =ScoreRisque(C2, H2, I2)
+            </div>
+            <p>Cette fonction LAMBDA calcule un score de risque en prenant en compte le solde du compte, le nombre d'incidents de paiement et l'ancienneté du client (en années). Chaque critère contribue au score total, qui est ensuite traduit en niveau de risque.</p>
+            
+            <table>
+                <tr>
+                    <th>ID Client</th>
+                    <th>Solde (€)</th>
+                    <th>Incidents</th>
+                    <th>Ancienneté (années)</th>
+                    <th>Score de Risque</th>
+                </tr>
+                <tr>
+                    <td>KC12345</td>
+                    <td>750</td>
+                    <td>2</td>
+                    <td>0.5</td>
+                    <td>Élevé (7)</td>
+                </tr>
+                <tr>
+                    <td>ID-078ABC</td>
+                    <td>5200</td>
+                    <td>0</td>
+                    <td>6</td>
+                    <td>Faible (2)</td>
+                </tr>
+                <tr>
+                    <td>BNP987654</td>
+                    <td>800</td>
+                    <td>4</td>
+                    <td>2</td>
+                    <td>Très élevé (8)</td>
+                </tr>
+            </table>
+        </div>
+
+        <div class="example">
+            <h3>Exemple 3.3 : Sélection d'échantillon basique</h3>
+            <p>Fonction LAMBDA pour identifier les clients à inclure dans un échantillon de contrôle.</p>
+            <div class="formula">
+                <!-- Définir la fonction dans le gestionnaire de noms: -->
+                InclusEchantillon = LAMBDA(id_client, score_risque, date_dernier_controle,
+                    LET(
+                        jours_depuis_controle, AUJOURDHUI() - date_dernier_controle,
+                        risque_eleve, DROITE(GAUCHE(score_risque, 5), 5) = "Élevé",
+                        jamais_controle, ESTVIDE(date_dernier_controle),
+                        controle_ancien, jours_depuis_controle > 365,
+                        OU(risque_eleve, jamais_controle, controle_ancien)
+                    )
+                )
+                
+                <!-- Utilisation dans la feuille: -->
+                =SI(InclusEchantillon(A2, J2, K2), "À contrôler", "")
+            </div>
+            <p>Cette fonction LAMBDA détermine si un client doit être inclus dans l'échantillon de contrôle selon trois critères : niveau de risque élevé, absence de contrôle antérieur, ou dernier contrôle datant de plus d'un an.</p>
+            
+            <table>
+                <tr>
+                    <th>ID Client</th>
+                    <th>Score de Risque</th>
+                    <th>Date Dernier Contrôle</th>
+                    <th>Statut</th>
+                </tr>
+                <tr>
+                    <td>KC12345</td>
+                    <td>Élevé (7)</td>
+                    <td>15/04/2023</td>
+                    <td>À contrôler</td>
+                </tr>
+                <tr>
+                    <td>ID-078ABC</td>
+                    <td>Faible (2)</td>
+                    <td>23/05/2022</td>
+                    <td>À contrôler</td>
+                </tr>
+                <tr>
+                    <td>BNP987654</td>
+                    <td>Très élevé (8)</td>
+                    <td>07/01/2023</td>
+                    <td>À contrôler</td>
+                </tr>
+                <tr>
+                    <td>AXFR7890</td>
+                    <td>Faible (3)</td>
+                    <td>01/03/2023</td>
+                    <td></td>
+                </tr>
+            </table>
+        </div>
+    </div>
+
+    <div class="section">
+        <h2>Niveau 4 : LAMBDA avancé et récursivité <span class="level-badge">Expert</span></h2>
+        
+        <p>Explorons des utilisations plus avancées de LAMBDA, y compris les fonctions récursives pour des traitements complexes.</p>
+
+        <div class="example">
+            <h3>Exemple 4.1 : Fonction d'extraction et validation d'informations client</h3>
+            <p>Extraction et validation des composants d'un code client complexe.</p>
+            <div class="formula">
+                <!-- Définir la fonction dans le gestionnaire de noms: -->
+                ExtraireInfoClient = LAMBDA(code_client,
+                    LET(
+                        code_nettoye, SUBSTITUE(MAJUSCULE(SUBSTITUE(code_client, " ", "")), "-", ""),
+                        prefix, GAUCHE(code_nettoye, 2),
+                        region_code, ENT(CNUM(STXT(code_nettoye, 3, 2))),
+                        client_num, DROITE(code_nettoye, NBCAR(code_nettoye) - 4),
+                        est_valide, ET(OU(prefix="FR", prefix="EU", prefix="IN"), region_code>0, region_code<=95),
+                        info, SI(est_valide, 
+                              CONCATENER("Région: ", region_code, ", ID: ", client_num, ", Type: ", 
+                                        SI(prefix="FR", "National", SI(prefix="EU", "Européen", "International"))),
+                              "Code client non valide"),
+                        info
+                    )
+                )
+                
+                <!-- Utilisation dans la feuille: -->
+                =ExtraireInfoClient(L2)
+            </div>
+            <p>Cette fonction complexe extrait des informations structurées à partir d'un code client au format [Préfixe][Code Région][Numéro Client] (ex: FR75123456). Elle décompose le code, valide ses composants, puis renvoie les informations formatées si le code est valide.</p>
+            
+            <table>
+                <tr>
+                    <th>Code Client</th>
+                    <th>Informations Extraites</th>
+                </tr>
+                <tr>
+                    <td>FR-75 123456</td>
+                    <td>Région: 75, ID: 123456, Type: National</td>
+                </tr>
+                <tr>
+                    <td>EU12987654</td>
+                    <td>Région: 12, ID: 987654, Type: Européen</td>
+                </tr>
+                <tr>
+                    <td>IN-95-AB1234</td>
+                    <td>Code client non valide</td>
+                </tr>
+                <tr>
+                    <td>FR99123456</td>
+                    <td>Code client non valide</td>
+                </tr>
+            </table>
+        </div>
+
+        <div class="example">
+            <h3>Exemple 4.2 : Échantillonnage stratifié pour le contrôle</h3>
+            <p>Fonction LAMBDA pour déterminer si un client doit faire partie d'un échantillon stratifié.</p>
+            <div class="formula">
+                <!-- Définir la fonction dans le gestionnaire de noms: -->
+                EchantillonStratifie = LAMBDA(segment, score_risque, montant_transaction, index_ligne,
+                    LET(
+                        taux_echantillon_jeune_bas, 0.05,
+                        taux_echantillon_jeune_moyen, 0.1,
+                        taux_echantillon_jeune_eleve, 0.3,
+                        taux_echantillon_adulte_bas, 0.03,
+                        taux_echantillon_adulte_moyen, 0.08,
+                        taux_echantillon_adulte_eleve, 0.2,
+                        taux_echantillon_senior_bas, 0.07,
+                        taux_echantillon_senior_moyen, 0.15,
+                        taux_echantillon_senior_eleve, 0.25,
+                        taux_segment, SI(segment="Jeune-Bas", taux_echantillon_jeune_bas,
+                                     SI(segment="Jeune-Moyen", taux_echantillon_jeune_moyen,
+                                     SI(segment="Jeune-Élevé", taux_echantillon_jeune_eleve,
+                                     SI(segment="Adulte-Bas", taux_echantillon_adulte_bas,
+                                     SI(segment="Adulte-Moyen", taux_echantillon_adulte_moyen,
+                                     SI(segment="Adulte-Élevé", taux_echantillon_adulte_eleve,
+                                     SI(segment="Senior-Bas", taux_echantillon_senior_bas,
+                                     SI(segment="Senior-Moyen", taux_echantillon_senior_moyen,
+                                     SI(segment="Senior-Élevé", taux_echantillon_senior_eleve, 0.1)))))))),
+                        
+                        facteur_risque, SI(GAUCHE(score_risque, 6)="Très é", 2, SI(GAUCHE(score_risque, 5)="Élevé", 1.5, 1)),
+                        facteur_montant, SI(montant_transaction > 100000, 2, SI(montant_transaction > 10000, 1.5, 1)),
+                        
+                        taux_ajuste, MIN(0.9, taux_segment * facteur_risque * facteur_montant),
+                        seuil_selection, MOD(index_ligne * 73, 100) / 100,
+                        
+                        seuil_selection <= taux_ajuste
+                    )
+                )
+                
+                <!-- Utilisation dans la feuille: -->
+                =SI(EchantillonStratifie(M2, J2, N2, LIGNE()), "Sélectionné", "")
+            </div>
+            <p>Cette fonction LAMBDA sophistiquée implémente un algorithme d'échantillonnage stratifié pour le contrôle, en tenant compte du segment client, du score de risque et du montant des transactions. Elle applique différents taux d'échantillonnage selon le segment, puis ajuste ces taux en fonction du risque et du montant. La sélection finale est pseudo-aléatoire mais déterministe (basée sur le numéro de ligne).</p>
+            
+            <table>
+                <tr>
+                    <th>Segment</th>
+                    <th>Score de Risque</th>
+                    <th>Montant Transaction (€)</th>
+                    <th>Statut</th>
+                </tr>
+                <tr>
+                    <td>Jeune-Bas</td>
+                    <td>Élevé (7)</td>
+                    <td>15000</td>
+                    <td>Sélectionné</td>
+                </tr>
+                <tr>
+                    <td>Adulte-Moyen</td>
+                    <td>Faible (2)</td>
+                    <td>5000</td>
+                    <td></td>
+                </tr>
+                <tr>
+                    <td>Senior-Élevé</td>
+                    <td>Très élevé (8)</td>
+                    <td>120000</td>
+                    <td>Sélectionné</td>
+                </tr>
+            </table>
+        </div>
+
+        <div class="example">
+            <h3>Exemple 4.3 : Fonction récursive pour calculer le niveau de risque d'un portefeuille</h3>
+            <p>Utilisation de la récursivité LAMBDA pour analyser un portefeuille de clients.</p>
+            <div class="formula">
+                <!-- Définir les fonctions auxiliaires dans le gestionnaire de noms: -->
+                SommeRisquePlage = LAMBDA(plage_risque, i, total, n,
+                    LET(
+                        score_actuel, ENT(DROITE(INDEX(plage_risque, i), 2)),
+                        nouveau_total, total + score_actuel,
+                        SI(i = n, nouveau_total, SommeRisquePlage(plage_risque, i + 1, nouveau_total, n))
+                    )
+                )
+                
+                <!-- Puis définir la fonction principale: -->
+                AnalysePortefeuille = LAMBDA(plage_ids, plage_segments, plage_scores_risque, plage_montants,
+                    LET(
+                        n, NBVAL(plage_ids),
+                        somme_risques, SommeRisquePlage(plage_scores_risque, 1, 0, n),
+                        risque_moyen, somme_risques / n,
+                        
+                        nb_jeunes, NBVAL(FILTRER(plage_segments, GAUCHE(plage_segments, 5)="Jeune")),
+                        nb_seniors, NBVAL(FILTRER(plage_segments, GAUCHE(plage_segments, 6)="Senior")),
+                        
+                        montant_total, SOMME(plage_montants),
+                        montant_max, MAX(plage_montants),
+                        
+                        risque_portfolio, SI(risque_moyen > 6, "Critique", 
+                                         SI(risque_moyen > 5, "Élevé", 
+                                         SI(risque_moyen > 4, "Significatif", 
+                                         SI(risque_moyen > 3, "Modéré", "Faible")))),
+                        
+                        CONCATENER("Risque du portefeuille: ", risque_portfolio, 
+                                  " (Score moyen: ", TEXTE(risque_moyen, "0.00"), 
+                                  ", Montant total: ", TEXTE(montant_total, "# ##0 €"), 
+                                  ", Répartition Jeunes/Seniors: ", nb_jeunes, "/", nb_seniors, ")")
+                    )
+                )
+                
+                <!-- Utilisation dans la feuille: -->
+                =AnalysePortefeuille(A2:A100, M2:M100, J2:J100, N2:N100)
+            </div>
+            <p>Cette fonction LAMBDA récursive analyse un portefeuille de clients pour produire un rapport de risque consolidé. Elle calcule le score de risque moyen, analyse la répartition des segments clients et agrège les montants des transactions. La récursivité est utilisée pour parcourir la plage de scores de risque et calculer leur somme.</p>
+            
+            <div class="note">
+                <p><strong>Note importante :</strong> Les fonctions récursives LAMBDA ont une limite de profondeur de récursion dans Excel. Pour des jeux de données volumineux, il peut être préférable d'utiliser des fonctions SOMME ou SOMMEPROD standard.</p>
+            </div>
+        </div>
+    </div>
+
+    <div class="section">
+        <h2>Niveau 5 : Combinaison de LET et LAMBDA pour des solutions avancées <span class="level-badge">Expert</span></h2>
+        
+        <p>Dans cette section, nous allons explorer comment combiner LET et LAMBDA pour créer des solutions complexes et puissantes pour le contrôle permanent LoD1.</p>
+
+        <div class="example">
+            <h3>Exemple 5.1 : Système de notation KYC (Know Your Customer)</h3>
+            <p>Système complet de notation KYC intégrant plusieurs critères et pondérations.</p>
+            <div class="formula">
+                <!-- Définir la fonction dans le gestionnaire de noms: -->
+                ScoreKYC = LAMBDA(age, resid_fisc, pep, justif_id, justif_dom, justif_rev, anciennete, nb_produits,
+                    LET(
+                        <!-- Critères d'identité et document (40%) -->
+                        score_age, SI(age < 25, 2, SI(age > 70, 3, 1)),
+                        score_resid, SI(resid_fisc = "France", 1, SI(resid_fisc = "UE", 2, 3)),
+                        score_pep, SI(pep = VRAI, 3, 1),
+                        score_justif_id, SI(justif_id = "Passeport", 1, SI(justif_id = "CNI", 1, 2)),
+                        score_justif_dom, SI(justif_dom = "Facture récente", 1, SI(justif_dom = "Avis imposition", 1, 2)),
+                        score_justif_rev, SI(justif_rev = "Bulletin de salaire", 1, SI(justif_rev = "Avis imposition", 1, 2)),
+                        
+                        <!-- Critères relation (30%) -->
+                        score_anciennete, SI(anciennete > 5, 1, SI(anciennete > 2, 2, 3)),
+                        score_produits, SI(nb_produits > 3, 1, SI(nb_produits > 1, 2, 3)),
+                        
+                        <!-- Calcul du score pondéré -->
+                        poids_id, 0.4,
+                        poids_relation, 0.3,
+                        poids_docs, 0.3,
+                        
+                        score_id, (score_age + score_resid + score_pep) / 3,
+                        score_relation, (score_anciennete + score_produits) / 2,
+                        score_docs, (score_justif_id + score_justif_dom + score_justif_rev) / 3,
+                        
+                        score_pondere, score_id * poids_id + score_relation * poids_relation + score_docs * poids_docs,
+                        
+                        <!-- Interprétation du score -->
+                        niveau_risque, SI(score_pondere < 1.5, "Faible", SI(score_pondere < 2, "Modéré", SI(score_pondere < 2.5, "Élevé", "Très élevé"))),
+                        frequence_controle, SI(score_pondere < 1.5, "36 mois", SI(score_pondere < 2, "24 mois", SI(score_pondere < 2.5, "12 mois", "6 mois"))),
+                        
+                        CONCATENER(niveau_risque, " (Score: ", TEXTE(score_pondere, "0.00"), ", Fréquence: ", frequence_controle, ")")
+                    )
+                )
+                
+                <!-- Utilisation dans la feuille: -->
+                =ScoreKYC(E2, O2, P2, Q2, R2, S2, I2, T2)
+            </div>
+            <p>Cette fonction LAMBDA complexe implémente un système de notation KYC (Know Your Customer) pour évaluer le risque client selon plusieurs dimensions : identité, résidence fiscale, statut PEP (Personne Politiquement Exposée), justificatifs fournis, ancienneté et nombre de produits détenus. Chaque critère est évalué et pondéré pour produire un score global qui détermine le niveau de risque et la fréquence de contrôle recommandée.</p>
+            
+            <table>
+                <tr>
+                    <th>Client</th>
+                    <th>Score KYC</th>
+                </tr>
+                <tr>
+                    <td>Client A (35 ans, France, non-PEP, 4 ans d'ancienneté, 4 produits)</td>
+                    <td>Faible (Score: 1.27, Fréquence: 36 mois)</td>
+                </tr>
+                <tr>
+                    <td>Client B (23 ans, Hors UE, PEP, 1 an d'ancienneté, 1 produit)</td>
+                    <td>Très élevé (Score: 2.77, Fréquence: 6 mois)</td>
+                </tr>
+                <tr>
+                    <td>Client C (72 ans, UE, non-PEP, 10 ans d'ancienneté, 2 produits)</td>
+                    <td>Modéré (Score: 1.87, Fréquence: 24 mois)</td>
+                </tr>
+            </table>
+        </div>
+
+        <div class="example">
+            <h3>Exemple 5.2 : Analyse de transactions suspectes</h3>
+            <p>Fonction avancée pour détecter et évaluer les transactions potentiellement suspectes.</p>
+            <div class="formula">
+                <!-- Définir les fonctions auxiliaires dans le gestionnaire de noms: -->
+                DetecterSuspicion = LAMBDA(montant, pays_dest, type_trans, freq_mensuelle, montant_habituel, 
+                    LET(
+                        est_pays_risque, OU(pays_dest="Monaco", pays_dest="Suisse", pays_dest="Luxembourg", pays_dest="Malte", pays_dest="Chypre"),
+                        est_gros_montant, montant > 15000,
+                        est_ecart_important, montant > montant_habituel * 2,
+                        est_haute_frequence, freq_mensuelle > 5,
+                        est_type_sensible, type_trans = "Espèces",
+                        
+                        score_suspicion, EST_PAIR(est_pays_risque) * 2 + est_gros_montant * 2 + est_ecart_important * 3 + est_haute_frequence * 1 + est_type_sensible * 3,
+                        OU(score_suspicion >= 5, ET(est_pays_risque, est_gros_montant, est_type_sensible))
+                    )
+                )
+                
+                <!-- Puis définir la fonction principale: -->
+                AnalyseTransaction = LAMBDA(id_client, id_trans, montant, pays_dest, type_trans, freq_mensuelle, montant_habituel,
+                    LET(
+                        est_suspecte, DetecterSuspicion(montant, pays_dest, type_trans, freq_mensuelle, montant_habituel),
+                        
+                        niveau_risque, SI(est_suspecte, "Suspecte", "Normal"),
+                        delai_analyse, SI(est_suspecte, "48h", "N/A"),
+                        action_requise, SI(est_suspecte, "Examiner", "Aucune"),
+                        
+                        CONCATENER(niveau_risque, " (Transaction ", id_trans, " pour ", id_client, ", ", action_requise, " dans ", delai_analyse, ")")
+                    )
+                )
+                
+                <!-- Utilisation dans la feuille: -->
+                =AnalyseTransaction(A2, U2, N2, V2, W2, X2, Y2)
+            </div>
+            <p>Cette fonction utilise une combinaison de LET et LAMBDA pour détecter et analyser les transactions potentiellement suspectes. Elle évalue plusieurs facteurs de risque : pays de destination, montant de la transaction par rapport à l'habitude du client, type de transaction et fréquence. La fonction DetecterSuspicion calcule un score de suspicion, puis AnalyseTransaction détermine si la transaction nécessite une analyse plus approfondie.</p>
+            
+            <table>
+                <tr>
+                    <th>ID Transaction</th>
+                    <th>Montant (€)</th>
+                    <th>Pays Destination</th>
+                    <th>Type</th>
+                    <th>Analyse</th>
+                </tr>
+                <tr>
+                    <td>T20230415-001</td>
+                    <td>5000</td>
+                    <td>France</td>
+                    <td>Virement</td>
+                    <td>Normal (Transaction T20230415-001 pour KC12345, Aucune dans N/A)</td>
+                </tr>
+                <tr>
+                    <td>T20230416-023</td>
+                    <td>25000</td>
+                    <td>Suisse</td>
+                    <td>Espèces</td>
+                    <td>Suspecte (Transaction T20230416-023 pour ID-078ABC, Examiner dans 48h)</td>
+                </tr>
+                <tr>
+                    <td>T20230417-045</td>
+                    <td>18000</td>
+                    <td>Luxembourg</td>
+                    <td>Virement</td>
+                    <td>Suspecte (Transaction T20230417-045 pour BNP987654, Examiner dans 48h)</td>
+                </tr>
+            </table>
+        </div>
+
+        <div class="example">
+            <h3>Exemple 5.3 : Génération de rapports de contrôle automatisés</h3>
+            <p>Fonction de génération de rapports de contrôle pour un client spécifique.</p>
+            <div class="formula">
+                <!-- Définir la fonction dans le gestionnaire de noms: -->
+                GenererRapportControle = LAMBDA(id_client, nom_client, score_kyc, transactions_analysees, nb_transactions_suspectes, date_controle, controleur,
+                    LET(
+                        taux_suspicion, nb_transactions_suspectes / transactions_analysees,
+                        niveau_conformite, SI(ET(GAUCHE(score_kyc, 6) = "Faible", taux_suspicion < 0.05), "Conforme",
+                                          SI(ET(GAUCHE(score_kyc, 6) = "Modéré", taux_suspicion < 0.03), "Conforme",
+                                          SI(taux_suspicion >= 0.1, "Non conforme", "Partiellement conforme"))),
+                        
+                        recommandation, SI(niveau_conformite = "Conforme", "Maintien de la relation",
+                                        SI(niveau_conformite = "Partiellement conforme", "Réévaluation dans 3 mois",
+                                        "Renforcement des contrôles ou rupture de la relation")),
+                        
+                        date_formatee, TEXTE(date_controle, "dd/mm/yyyy"),
+                        
+                        CONCATENER(
+                            "RAPPORT DE CONTRÔLE LoD1", REPT(CHAR(10), 2),
+                            "ID Client: ", id_client, CHAR(10),
+                            "Nom: ", nom_client, CHAR(10),
+                            "Date du contrôle: ", date_formatee, CHAR(10),
+                            "Contrôleur: ", controleur, REPT(CHAR(10), 2),
+                            "Score KYC: ", score_kyc, CHAR(10),
+                            "Transactions analysées: ", transactions_analysees, CHAR(10),
+                            "Transactions suspectes: ", nb_transactions_suspectes, " (", TEXTE(taux_suspicion, "0.0%"), ")", REPT(CHAR(10), 2),
+                            "CONCLUSION:", CHAR(10),
+                            "Niveau de conformité: ", niveau_conformite, CHAR(10),
+                            "Recommandation: ", recommandation
+                        )
+                    )
+                )
+                
+                <!-- Utilisation dans la feuille: -->
+                =GenererRapportControle(A2, Z2, AA2, AB2, AC2, AUJOURDHUI(), "Jean Dupont")
+            </div>
+            <p>Cette fonction LAMBDA génère un rapport de contrôle complet pour un client en analysant son score KYC et ses transactions suspectes. Elle détermine le niveau de conformité du client et formule une recommandation adaptée pour la gestion de la relation. Le rapport généré peut être utilisé comme base pour les rapports de contrôle permanent LoD1.</p>
+            
+            <div class="note">
+                <p><strong>Remarque :</strong> Dans un environnement réel, cette fonction pourrait être associée à une macro VBA pour exporter le rapport au format PDF ou Word, ou pour l'envoyer automatiquement par e-mail aux parties prenantes concernées.</p>
+            </div>
+        </div>
+    </div>
+
+    <div class="section">
+        <h2>Conseils pratiques d'implémentation</h2>
+        
+        <h3>Gestion des noms pour les fonctions LAMBDA</h3>
+        <p>Pour utiliser les fonctions LAMBDA dans votre feuille Excel, vous devez les définir dans le Gestionnaire de noms :</p>
+        <ol>
+            <li>Allez dans l'onglet "Formules" du ruban</li>
+            <li>Cliquez sur "Gestionnaire de noms"</li>
+            <li>Cliquez sur "Nouveau"</li>
+            <li>Entrez le nom de votre fonction (sans espace ni caractère spécial)</li>
+            <li>Collez votre définition LAMBDA dans le champ "Fait référence à"</li>
+            <li>Cliquez sur "OK"</li>
+        </ol>
+        
+        <h3>Débuggage des fonctions LET et LAMBDA</h3>
+        <p>Pour débugger vos fonctions LET et LAMBDA :</p>
+        <ul>
+            <li>Décomposez les fonctions complexes en fonctions plus simples</li>
+            <li>Utilisez des variables intermédiaires pour tester des parties spécifiques</li>
+            <li>Ajoutez des variables de débogage dans vos fonctions pour afficher des valeurs intermédiaires</li>
+            <li>Testez vos fonctions avec des cas simples avant de passer à des cas plus complexes</li>
+        </ul>
+        
+        <h3>Organisation des fonctions pour le contrôle permanent</h3>
+        <p>Pour un projet de contrôle permanent LoD1 efficace :</p>
+        <ul>
+            <li>Créez un classeur dédié aux définitions de vos fonctions LAMBDA</li>
+            <li>Documentez chaque fonction avec des commentaires explicatifs</li>
+            <li>Regroupez les fonctions par catégorie (nettoyage de données, analyse de risque, etc.)</li>
+            <li>Créez un tableau de bord utilisant ces fonctions pour visualiser les résultats</li>
+            <li>Pensez à l'exportation des résultats vers d'autres systèmes (via Power Query ou VBA)</li>
+        </ul>
+    </div>
+
+    <div class="section">
+        <h2>Conclusion</h2>
+        
+        <p>Les fonctions LET et LAMBDA transforment Excel en un outil de programmation fonctionnelle puissant, particulièrement adapté aux exigences du contrôle permanent LoD1 dans le secteur bancaire. Elles permettent de :</p>
+        
+        <ul>
+            <li>Améliorer la lisibilité et la maintenabilité des formules complexes</li>
+            <li>Créer des fonctions personnalisées réutilisables sans recourir au VBA</li>
+            <li>Automatiser les processus de contrôle et de validation des données</li>
+            <li>Standardiser les méthodologies d'analyse des risques</li>
+            <li>Gagner en productivité dans les tâches récurrentes de contrôle</li>
+        </ul>
+        
+        <p>En maîtrisant ces fonctions, les équipes de contrôle permanent peuvent développer des solutions sur mesure, adaptées à leurs besoins spécifiques, tout en garantissant la cohérence et la traçabilité des contrôles effectués.</p>
+        
+        <div class="note">
+            <p><strong>Perspective d'évolution :</strong> Microsoft continue d'enrichir les capacités des fonctions LAMBDA et envisage à terme de permettre leur partage entre utilisateurs via une bibliothèque de fonctions. Cette évolution facilitera encore davantage la standardisation des contrôles au sein des établissements bancaires.</p>
+        </div>
+    </div>
+
+    <footer style="text-align: center; margin-top: 50px; padding: 20px; font-size: 14px; color: var(--light-text);">
+        <p>Direction des Contrôles Permanents - Guide de référence © 2023</p>
+    </footer>
+</body>
+</html>
