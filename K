@@ -1,0 +1,34 @@
+=LET(
+    /* --- Extraction des colonnes --- */
+    id;          DonneesBrutes!A2:A1000;
+    age_mesure;  DonneesBrutes!B2:B1000;
+    sexe;        DonneesBrutes!C2:C1000;
+    poids;       DonneesBrutes!D2:D1000;
+    taille;      DonneesBrutes!E2:E1000;
+    date_mes;    DonneesBrutes!F2:F1000;
+
+    /* --- Enregistrements complets --- */
+    ok; (age_mesure<>"")*(poids<>"")*(taille<>"")*(date_mes<>"" );
+
+    /* 1. Empile les colonnes + IMC                                          */
+    brut; FILTER(
+            HSTACK( id; date_mes; age_mesure; sexe; poids; taille;
+                    poids/(taille^2)      /* IMC en 7ᵉ col.                  */
+            );
+            ok
+          );
+
+    /* 2. Trie par ID ↑ puis Date ↓  → la + récente arrive en tête           */
+    trie; SORTBY( brut; id; 1; date_mes; -1 );
+
+    /* 3. UNIQUE sans exactly_once : garde la 1ʳᵉ ligne de chaque ID         */
+    population_propre; UNIQUE(trie);
+
+    /* 4. Âge *aujourd’hui* = âge_mesure + écoulement depuis la mesure       */
+    age_live; INDEX(population_propre;;3) +            /* âge mesuré */ 
+              YEARFRAC( INDEX(population_propre;;2);   /* date mesure */ 
+                       AUJOURDHUI() );
+
+    /* 5. On renvoie le tableau avec l’âge « vivant » en colonne finale      */
+    HSTACK(population_propre; age_live)
+)
