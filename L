@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<title>Lettre de motivation – Christopher Fraysse</title>
+
+<!-- Un mini‐style par défaut ; supprimez-le ou adaptez-le si nécessaire -->
+<style>
+body {
+  font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+  margin: 2.5cm;          /* équivalent du \geometry{…} */
+  line-height: 1.4;
+  font-size: 14px;
+}
+.texte-droite { text-align: right; }
+.texte-gauche { text-align: left; }
+.paragraphe   { margin: 0 0 1em 0; }
+.objet        { font-weight: bold; margin-top: 0.5em; }
+.signature    { text-align: right; font-weight: bold; }
+</style>
+</head>
+<body>
+
+<!-- Coordonnées candidates -->
+<div class="texte-gauche">
+  <strong>FRAYSSE Christopher</strong><br>
+  34000 Montpellier, France<br>
+  Tél&nbsp;: 06&nbsp;43&nbsp;03&nbsp;62&nbsp;25<br>
+  Mail&nbsp;:
+  <a href="mailto:christopherfraysse34@gmail.com">
+    christopherfraysse34@gmail.com
+  </a>
+</div>
+
+<!-- Date du jour -->
+<p class="texte-droite">16&nbsp;mai&nbsp;2025</p>
+
+<!-- Coordonnées de l’entreprise -->
+<div class="texte-droite">
+  <strong>Spuerkeess</strong><br>
+  Luxembourg, Luxembourg
+</div>
+
+<!-- Objet -->
+<p class="objet">Objet : Stage volontaire de 6&nbsp;mois à partir de mi-septembre</p>
+
+<!-- Corps de la lettre -->
+<p class="paragraphe"><strong>Madame, Monsieur,</strong></p>
+
+<p class="paragraphe">
+  Actuellement en fin de Master&nbsp;2 Monnaie-Banque-Finance-Assurance&nbsp;(MBFA),
+  parcours Analyse des Risques Bancaires, je suis à la recherche d’un stage
+  volontaire d’une durée de 6&nbsp;mois que je souhaiterais effectuer une fois
+  mon&nbsp; diplôme obtenu, dès mi-septembre&nbsp;2025.
+  Ce stage volontaire est, je pense, une étape essentielle afin de recentrer mon
+  profil et ma carrière vers des métiers quantitatifs.
+</p>
+
+<p class="paragraphe">
+  Mon parcours académique m’a permis d’acquérir une solide compréhension des
+  mécanismes financiers et une maîtrise approfondie des techniques
+  quantitatives d’analyse des risques. J’ai développé des connaissances
+  importantes en produits financiers, pricing d’options, analyse des séries
+  temporelles, calcul stochastique, mais aussi en analyse des risques crédit et
+  en analyse du risque de liquidité.
+  En complément de ce cursus exigeant, je m’investis actuellement dans le
+  renforcement de mes compétences quantitatives par le biais de ma préparation
+  active à la certification FRM Part I (prévue en août 2025) et à la finalisation
+  prochaine de la certification Financial Risk and Valuation Modeling (CFI).
+  J’investis aussi une part importante de mon temps à approfondir ma maîtrise de
+  Python en l’adaptant à la carrière que je souhaite prendre, comme en témoigne
+  mon projet de seconde année de Master en calcul stochastique où j’ai implémenté
+  un modèle de pricing d’option sur Nvidia développé « from scratch » en Python.
+</p>
+
+<p class="paragraphe">
+  Souhaitant rebondir après un stage en contrôle permanent (LoD1), j’ai pour
+  objectif de consolider mon profil quantitatif et de m’orienter vers des
+  métiers où l’analyse de risque, la modélisation avancée et l’ingénierie
+  financière sont centrales. Le stage volontaire est à mes yeux une merveilleuse
+  opportunité pour recentrer mon profil vers des métiers du risque tout en
+  gagnant une précieuse expérience sur un marché ultra-concurrentiel. Ayant pris
+  conscience de l’exigence des métiers quantitatifs visés, je me suis pleinement
+  investi dans cet apprentissage complémentaire pour consolider mes acquis et
+  démontrer ma capacité à performer au plus haut niveau.
+</p>
+
+<p class="paragraphe">
+  En plus de mes études, mon implication dans la gestion financière de la
+  SCI familiale m’a confronté à des problématiques concrètes (modélisation de
+  cash-flows, analyse de TRI et risque de défaut, négociation). J’ai ainsi
+  développé une approche pragmatique et très orientée résultats. Cette
+  expérience, combinée à mon stage actuel en LoD1 au sein de BGL BNP Paribas
+  (Luxembourg) où j’y découvre la gestion du risque au quotidien tout en
+  mettant en place des méthodes d’optimisation d’échantillon et une formation
+  continue des collaborateurs aux nouvelles versions d’Excel, me pousse à croire
+  que je possède un profil très opérationnel adapté à l’alternance. Ainsi, ces
+  expériences, ma volonté personnelle de m’auto-former à des outils techniques
+  essentiels (PowerQuery, Python pour back-testing et modélisation, SQL pour
+  données, R pour modélisation du risque) et mon aptitude à analyser des sujets
+  complexes, constituent, j’en suis sûr, des atouts solides pour réussir au sein
+  de votre banque.
+</p>
+
+<p class="paragraphe">
+  Enfin, je suis convaincu que l’environnement stimulant et
+  professionnalisant de Spuerkeess est le tremplin pour lancer ma carrière vers
+  des métiers qui me plaisent tout en me permettant d’avoir un très bon profil
+  pour mon entrée définitive sur le marché de l’emploi à la fin de ce
+  stage volontaire.<br><br>
+  Je vous remercie pour l’attention portée à ma candidature et reste à votre
+  disposition pour toute information complémentaire.
+</p>
+
+<p class="paragraphe">
+  <strong>Veuillez agréer, Madame, Monsieur, l’expression de mes salutations distinguées.</strong>
+</p>
+
+<p class="signature">
+  FRAYSSE Christopher
+</p>
+
+</body>
+</html>
