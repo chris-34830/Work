@@ -1,0 +1,6 @@
+=LET(
+     Donnees      ; Feuil1!$A$2:$ZZ$1000 ;
+     MasqueLigne  ; COUNTIF($A$1:$A$8 ; INDEX(Donnees ; ; MATCH("Prénom" ; Feuil1!$1:$1 ; 0)))>0 ;
+     ColIndices   ; TRANSPOSE( MATCH( $B$1:$B$6 ; Feuil1!$1:$1 ; 0 ) ) ;
+     CHOOSECOLS( FILTER( Donnees ; MasqueLigne ) ; ColIndices )
+)
