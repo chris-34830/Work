@@ -1,0 +1,27 @@
+=LET(
+    Table       ; Sheet1!$A$2:$ZZ$1000 ;     // plage complète (hors ligne d'en-têtes)
+    Headers     ; Sheet1!$1:$1 ;             // ligne 1 = en-têtes
+    NameList    ; $A$1:$A$8 ;                // prénoms à garder
+    KeepColsHdr ; $B$1:$B$6 ;                // en-têtes des colonnes C, AN, X, S, T, U
+
+    /* 1. Lignes à conserver : prénom présent dans NameList */
+    RowMask ; ISNUMBER(
+                 MATCH(
+                     INDEX(Table;; MATCH("Prénom"; Headers; 0)) ;
+                     NameList ;
+                     0
+                 )
+              ) ;
+
+    /* 2. Numéros de colonnes à conserver, en ignorant les #N/A */
+    ColIdx  ; FILTER(
+                 MATCH(KeepColsHdr; Headers; 0) ;
+                 ISNUMBER(MATCH(KeepColsHdr; Headers; 0))
+              ) ;
+
+    /* 3. Résultat final : lignes filtrées + colonnes sélectionnées */
+    CHOOSECOLS(
+        FILTER(Table ; RowMask) ;
+        ColIdx
+    )
+)
