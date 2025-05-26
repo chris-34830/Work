@@ -1,0 +1,34 @@
+=LET(
+    /* --- plages et listes --- */
+    Table       ; Sheet1!$A$2:$ZZ$1000 ;      // données sans la ligne 1
+    Headers     ; Sheet1!$1:$1 ;              // ligne d’en-têtes
+    NameList    ; $A$1:$A$8 ;                // prénoms à garder
+    KeepColsHdr ; $B$1:$B$6 ;                // en-têtes des colonnes C, AN, X, S, T, U
+
+    /* --- 1. lignes à conserver --- */
+    RowMask ; ISNUMBER(
+                 MATCH(
+                     INDEX(Table;; MATCH("Prénom"; Headers; 0)) ;
+                     NameList ;
+                     0
+                 )
+              ) ;
+
+    /* --- 2. numéros de colonnes à conserver (on écarte les #N/A) --- */
+    ColIdx  ; FILTER(
+                 MATCH(KeepColsHdr; Headers; 0) ;
+                 ISNUMBER(MATCH(KeepColsHdr; Headers; 0))
+              ) ;
+
+    /* --- 3a. ligne d’en-têtes filtrée aux bonnes colonnes --- */
+    HeaderRow ; CHOOSECOLS( Headers ; ColIdx ) ;
+
+    /* --- 3b. données filtrées + bonnes colonnes --- */
+    DataBody  ; CHOOSECOLS(
+                   FILTER(Table ; RowMask) ;
+                   ColIdx
+               ) ;
+
+    /* --- 4. empiler la ligne d’en-têtes au-dessus du corps --- */
+    VSTACK( HeaderRow ; DataBody )
+)
