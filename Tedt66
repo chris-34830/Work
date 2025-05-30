@@ -1,0 +1,74 @@
+=LAMBDA(
+  Database; NameList; KeepCols; Suivi; Clés; ColRes; ColSuiv;
+  LET(
+    /* 1) Filtrage initial (votre “tableau résultat”) */
+    Headers;      INDEX(Database; 1; );
+    DataBody;     DROP(Database; 1);
+    NameColPos;   XMATCH("Control Executor UID"; Headers; 0);
+    RowMask;      ISNUMBER( MATCH( INDEX(DataBody;;NameColPos); NameList; 0 ) );
+    ColPos;       FILTER( XMATCH(KeepCols; Headers; 0); ISNUMBER( XMATCH(KeepCols; Headers; 0) ) );
+    HeaderRow;    CHOOSECOLS(Headers; ColPos);
+    DataRows;     CHOOSECOLS( FILTER(DataBody; RowMask); ColPos);
+    Résultat;     VSTACK(HeaderRow; DataRows);
+
+    /* 2) Séparer en-têtes / corps pour Résultat et Suivi */
+    HRes;   INDEX(Résultat; 1; );
+    DRes;   DROP(Résultat; 1);
+    HSuiv;  INDEX(Suivi;    1; );
+    DSuiv;  DROP(Suivi;     1);
+
+    /* 3) Positions des clés dans chaque table */
+    P1R;    XMATCH(INDEX(Clés;1); HRes;   0);
+    P2R;    XMATCH(INDEX(Clés;2); HRes;   0);
+    P1S;    XMATCH(INDEX(Clés;1); HSuiv;  0);
+    P2S;    XMATCH(INDEX(Clés;2); HSuiv;  0);
+
+    /* 4) Construire les paires de clés et leur union */
+    KRes;      HSTACK( INDEX(DRes;;P1R);  INDEX(DRes;;P2R) );
+    KSuiv;     HSTACK( INDEX(DSuiv;;P1S); INDEX(DSuiv;;P2S) );
+    ToutesClés; UNIQUE( VSTACK(KRes; KSuiv) );
+
+    /* 5) Fonction interne pour comparer une paire de clés */
+    CompareLigne; LAMBDA(i;
+      LET(
+        k1;       INDEX(ToutesClés; i; 1);
+        k2;       INDEX(ToutesClés; i; 2);
+        inR;      ISNUMBER( MATCH( HSTACK(k1; k2); KRes;  0 ) );
+        inS;      ISNUMBER( MATCH( HSTACK(k1; k2); KSuiv; 0 ) );
+        Cas;      IF(inR*inS; "Commun"; IF(inR; "Uniquement Résultat"; "Uniquement Suivi"));
+        Diverg;   IF(inR*inS;
+                    LET(
+                      idxR; MATCH( HSTACK(k1; k2); KRes;  0 );
+                      idxS; MATCH( HSTACK(k1; k2); KSuiv; 0 );
+                      Liste; MAP(
+                        SEQUENCE( COLUMNS(ColRes) );
+                        LAMBDA(j;
+                          LET(
+                            colR; INDEX(ColRes; j);
+                            colS; INDEX(ColSuiv; j);
+                            posR; XMATCH(colR; HRes;   0);
+                            posS; XMATCH(colS; HSuiv;  0);
+                            vR;   TEXT( INDEX(DRes; idxR; posR ); "General" );
+                            vS;   TEXT( INDEX(DSuiv; idxS; posS ); "General" );
+                            IF(vR<>vS; colR & ": Rés=" & vR & " <> Suiv=" & vS; "")
+                          )
+                        )
+                      );
+                      TEXTJOIN(" ; "; TRUE; Liste)
+                    );
+                    ""
+                  );
+        HSTACK(k1; k2; Cas; Diverg)
+      )
+    );
+
+    /* 6) Appliquer à chaque ligne et empiler le résultat final */
+    RésFinal; MAP( SEQUENCE( ROWS(ToutesClés) ); CompareLigne);
+
+    /* 7) Table finale avec en-tête */
+    VSTACK(
+      {"Clé1"; "Clé2"; "Cas"; "Divergences"};
+      RésFinal
+    )
+  )
+)
