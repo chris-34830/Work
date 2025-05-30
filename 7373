@@ -1,0 +1,59 @@
+=LAMBDA(
+  TableRésultat;TableSuivi;
+  Clé1Rés;Clé2Rés;Clé1Suiv;Clé2Suiv;
+  ControlResultIDRés;CoveredPeriodStartDateRés;CoveredPeriodEndDateRés;ControlExecutionDateRés;GlobalScoreSynthesisRés;
+  ControlResultIDSuiv;DebutPeriodeCouverteSuiv;FinPeriodeCouverteSuiv;DateRealisationSuiv;CotationSuiv;
+LET(
+  KR; HSTACK(LOWER(Clé1Rés); LOWER(Clé2Rés));
+  KS; HSTACK(LOWER(Clé1Suiv); LOWER(Clé2Suiv));
+  AllK; UNIQUE(VSTACK(KR;KS));
+  ColNames; {"ControlResultID";"CoveredPeriodStartDate";"CoveredPeriodEndDate";"ControlExecutionDate";"GlobalScoreSynthesis"};
+  RésCols; HSTACK(ControlResultIDRés; CoveredPeriodStartDateRés; CoveredPeriodEndDateRés; ControlExecutionDateRés; GlobalScoreSynthesisRés);
+  SuivCols; HSTACK(ControlResultIDSuiv; DebutPeriodeCouverteSuiv; FinPeriodeCouverteSuiv; DateRealisationSuiv; CotationSuiv);
+  Res;
+    REDUCE(
+      MAKEARRAY(0;6;LAMBDA(r;c;""));
+      AllK;
+      LAMBDA(acc;k;
+        LET(
+          k1; INDEX(k;1); k2; INDEX(k;2);
+          rRow; FILTER(RésCols; (LOWER(Clé1Rés)=k1)*(LOWER(Clé2Rés)=k2));
+          sRow; FILTER(SuivCols; (LOWER(Clé1Suiv)=k1)*(LOWER(Clé2Suiv)=k2));
+          hasR; ROWS(rRow)>0; hasS; ROWS(sRow)>0;
+          stat; IF(hasR; IF(hasS;"Commun";"Résultat seul");"Suivi seul");
+          singleRow; HSTACK(k1; k2; stat; ""; ""; "");
+          out;
+            IF(
+              stat<>"Commun";
+              singleRow;
+              LET(
+                idx;
+                  FILTER(
+                    SEQUENCE(ROWS(ColNames));
+                    INDEX(rRow;1;SEQUENCE(ROWS(ColNames)))
+                    <> INDEX(sRow;1;SEQUENCE(ROWS(ColNames)))
+                  );
+                IF(
+                  ROWS(idx)=0;
+                  MAKEARRAY(0;6;LAMBDA(rr;cc;""));
+                  MAP(
+                    idx;
+                    LAMBDA(i;
+                      HSTACK(
+                        k1; k2; stat;
+                        INDEX(ColNames;i);
+                        INDEX(rRow;1;i);
+                        INDEX(sRow;1;i)
+                      )
+                    )
+                  )
+                )
+              )
+            );
+          VSTACK(acc; out)
+        )
+      )
+    );
+  Res
+)
+)
