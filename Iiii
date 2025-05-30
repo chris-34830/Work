@@ -1,0 +1,25 @@
+=LAMBDA(TableRésultat; TableSuivi; Clé1RésNom; Clé2RésNom; Clé1SuivNom; Clé2SuivNom;
+    LET(
+        HeadersRés; INDEX(TableRésultat; 1; );
+        DonnéesRés; DROP(TableRésultat; 1);
+        Clé1RésPos; XMATCH(Clé1RésNom; HeadersRés; 0);
+        Clé2RésPos; XMATCH(Clé2RésNom; HeadersRés; 0);
+        ClésRés; LOWER( DonnéesRés[;Clé1RésPos] ) & "|" & LOWER( DonnéesRés[;Clé2RésPos] );
+
+        HeadersSuiv; INDEX(TableSuivi; 1; );
+        DonnéesSuiv; DROP(TableSuivi; 1);
+        Clé1SuivPos; XMATCH(Clé1SuivNom; HeadersSuiv; 0);
+        Clé2SuivPos; XMATCH(Clé2SuivNom; HeadersSuiv; 0);
+        ClésSuiv; LOWER( DonnéesSuiv[;Clé1SuivPos] ) & "|" & LOWER( DonnéesSuiv[;Clé2SuivPos] );
+
+        PrésentsDansRésEtPasSuiv; FILTER(ClésRés; ISNA(MATCH(ClésRés; ClésSuiv; 0)));
+        PrésentsDansSuivEtPasRés; FILTER(ClésSuiv; ISNA(MATCH(ClésSuiv; ClésRés; 0)));
+        PrésentsDansLesDeux; FILTER(ClésRés; ISNUMBER(MATCH(ClésRés; ClésSuiv; 0)));
+
+        HSTACK(
+            VSTACK("Présents uniquement dans Résultat"; PrésentsDansRésEtPasSuiv);
+            VSTACK("Présents uniquement dans Suivi"; PrésentsDansSuivEtPasRés);
+            VSTACK("Présents dans les deux"; PrésentsDansLesDeux)
+        )
+    )
+)
