@@ -1,0 +1,85 @@
+=LAMBDA(
+  Résultat;       /* votre VSTACK(HeaderRow;DataRows) */
+  Suivi;          /* plage nommée de la feuille de suivi */
+  Clés;           /* {"NomColClé1";"NomColClé2"} */
+  PairesCols;     /* 2×N array : 
+                     première ligne = noms dans Résultat,
+                     deuxième ligne = noms dans Suivi */
+  LET(
+    /* 1) Séparation en têtes / données */
+    HRes;   INDEX(Résultat;1; );
+    DRes;   DROP(Résultat;1);
+    HSuiv;  INDEX(Suivi;1; );
+    DSuiv;  DROP(Suivi;1);
+
+    /* 2) Positions des clés */
+    P1R;    XMATCH(INDEX(Clés;1); HRes;  0);
+    P2R;    XMATCH(INDEX(Clés;2); HRes;  0);
+    P1S;    XMATCH(INDEX(Clés;1); HSuiv; 0);
+    P2S;    XMATCH(INDEX(Clés;2); HSuiv; 0);
+
+    /* 3) Paires de clés dans chaque table */
+    KRes;   HSTACK( INDEX(DRes;;P1R); INDEX(DRes;;P2R) );
+    KSuiv;  HSTACK( INDEX(DSuiv;;P1S); INDEX(DSuiv;;P2S) );
+
+    /* 4) Ensemble unique de toutes les clés */
+    ToutesClés; UNIQUE( VSTACK(KRes; KSuiv) );
+
+    /* 5) Lambda qui compare ligne par ligne */
+    CompareLigne; LAMBDA(i;
+      LET(
+        k1; INDEX(ToutesClés;i;1),
+        k2; INDEX(ToutesClés;i;2),
+
+        inR; ISNUMBER( MATCH(HSTACK(k1;k2); KRes;  0) ),
+        inS; ISNUMBER( MATCH(HSTACK(k1;k2); KSuiv; 0) ),
+
+        Cas; IF(inR*inS; 
+               "Commun"; 
+               IF(inR; "Uniquement Résultat"; "Uniquement Suivi")
+        ),
+
+        /* indices pour extraire les lignes */
+        idxR; IF(inR; MATCH(HSTACK(k1;k2); KRes;  0)),
+        idxS; IF(inS; MATCH(HSTACK(k1;k2); KSuiv; 0)),
+
+        /* 6) Pour les communs, on parcourt chaque paire de colonnes */
+        Diverg; IF(inR*inS;
+          LET(
+            L; BYCOL(
+                PairesCols;
+                LAMBDA(pair;
+                  LET(
+                    colRes; INDEX(pair;1),
+                    colSuiv; INDEX(pair;2),
+                    posR;   XMATCH(colRes;  HRes;  0),
+                    posS;   XMATCH(colSuiv; HSuiv; 0),
+                    vR;     TEXT(INDEX(DRes; idxR; posR);"General"),
+                    vS;     TEXT(INDEX(DSuiv; idxS; posS);"General"),
+                    IF(vR<>vS;
+                       colRes & "/" & colSuiv 
+                         & ": Rés=" & vR 
+                         & " <> Suiv=" & vS;
+                       ""
+                    )
+                  )
+                )
+            );
+            TEXTJOIN(" ; "; VRAI; L)
+          );
+          ""  /* pas de divergence si pas “Commun” */
+        ),
+
+        HSTACK(k1; k2; Cas; Diverg)
+      )
+    );
+
+    /* 7) On applique à toutes les clés et on ajoute un header */
+    RésFinal; MAP( SEQUENCE(ROWS(ToutesClés)); CompareLigne );
+
+    VSTACK(
+      {"Clé1";"Clé2";"Cas";"Divergences"};
+      RésFinal
+    )
+  )
+)
