@@ -1,0 +1,78 @@
+=LAMBDA(GetResultTable;Suivi;KeysRes;KeysSuiv;CompRes;CompSuiv;
+  LET(
+    ResTable;            GetResultTable(Database;NameList;KeepCols);
+    ResH;                INDEX(ResTable;1;);
+    ResD;                DROP(ResTable;1);
+    SuiviH;              INDEX(Suivi;1;);
+    SuiviD;              DROP(Suivi;1);
+    ResKeyPos;           XMATCH(INDEX(KeysRes;SEQUENCE(1;2));ResH;0);
+    SuivKeyPos;          XMATCH(INDEX(KeysSuiv;SEQUENCE(1;2));SuiviH;0);
+    CompResPos;          XMATCH(CompRes;ResH;0);
+    CompSuivPos;         XMATCH(CompSuiv;SuiviH;0);
+    ResKeys;             LOWER(CHOOSECOLS(ResD;ResKeyPos));
+    SuivKeys;            LOWER(CHOOSECOLS(SuiviD;SuivKeyPos));
+    ResK;                BYROW(ResKeys;LAMBDA(r;TEXTJOIN("|";1;r)));
+    SuivK;               BYROW(SuivKeys;LAMBDA(r;TEXTJOIN("|";1;r)));
+    AllK;                UNIQUE(VSTACK(ResK;SuivK));
+    Compare; MAP(AllK;LAMBDA(k;
+      LET(
+        parts;           TEXTSPLIT(k;"|");
+        k1;              INDEX(parts;1);
+        k2;              INDEX(parts;2);
+        inR;             ISNUMBER(MATCH(k;ResK;0));
+        inS;             ISNUMBER(MATCH(k;SuivK;0));
+        stat;            IF(inR*inS;"Commun";IF(inR;"Résultat seul";"Suivi seul"));
+        rRow;            IF(inR;XLOOKUP(k;ResK;ResD;"";0);MAKEARRAY(1;COLUMNS(ResD);LAMBDA(r;c;"")));
+        sRow;            IF(inS;XLOOKUP(k;SuivK;SuiviD;"";0);MAKEARRAY(1;COLUMNS(SuiviD);LAMBDA(r;c;"")));
+        Diffs;           IF(stat="Commun";
+                          LET(
+                            M;MAP(SEQUENCE(ROWS(CompRes));LAMBDA(i;
+                              LET(
+                                cR;INDEX(CompResPos;i);
+                                cS;INDEX(CompSuivPos;i);
+                                cN;INDEX(CompRes;i);
+                                vR;INDEX(rRow;cR);
+                                vS;INDEX(sRow;cS);
+                                HSTACK(cN;vR;vS)
+                              )
+                            ));
+                            B;MAP(SEQUENCE(ROWS(CompRes));LAMBDA(i;
+                              LET(
+                                vR;INDEX(rRow;INDEX(CompResPos;i));
+                                vS;INDEX(sRow;INDEX(CompSuivPos;i));
+                                vR<>vS
+                              )
+                            ));
+                            IFERROR(FILTER(M;B);MAKEARRAY(0;3;LAMBDA(r;c;"")))
+                          );
+                          MAKEARRAY(0;3;LAMBDA(r;c;""))
+                        );
+        Out;             IF(stat<>"Commun";
+                          HSTACK(k1;k2;stat;"";"";"");
+                          IF(ROWS(Diffs)=0;
+                            HSTACK(k1;k2;stat;"";"";"");
+                            REDUCE(
+                              "";
+                              Diffs;
+                              LAMBDA(acc;t;
+                                LET(
+                                  row;HSTACK(k1;k2;stat;t);
+                                  IF(acc="";row;VSTACK(acc;row))
+                                )
+                              )
+                            )
+                          )
+                        );
+        Out
+      )
+    ));
+    VSTACK(
+      {"Key1";"Key2";"Statut";"Colonne";"Valeur Résultat";"Valeur Suivi"};
+      REDUCE(
+        "";
+        Compare;
+        LAMBDA(a;b;IF(a="";b;VSTACK(a;b)))
+      )
+    )
+  )
+)
