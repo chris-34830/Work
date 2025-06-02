@@ -1,0 +1,25 @@
+= LAMBDA(
+    Nom, DateD, VL1, VL2, VL3, VL4, VL5, VL6, VL7,   /* valeurs locales  */
+    NomB, DateB,
+    VN, VO, VP, VQ, VR2, VS, VT,                     /* valeurs équipe   */
+    LET(
+        idx, XMATCH(1; (NomB = Nom) * (DateB = DateD)),
+        IF(ISNA(idx),
+            "Absent dans Dossier équipe",
+            LET(
+                vloc,   HSTACK(VL1, VL2, VL3, VL4, VL5, VL6, VL7),
+                vexp,   HSTACK(
+                            INDEX(VN; idx), INDEX(VO; idx), INDEX(VP; idx),
+                            INDEX(VQ; idx), INDEX(VR2; idx), INDEX(VS; idx),
+                            INDEX(VT; idx)
+                        ),
+                labels, {"X","Y","Z","AA","AB","AC","AD"},
+                diff,   vexp <> vloc,
+                IF( SUM(--diff) = 0,
+                    "OK",
+                    "Anomalie : " & TEXTJOIN(", "; TRUE; FILTER(labels; diff))
+                )
+            )
+        )
+    )
+)
