@@ -1,0 +1,45 @@
+=LET(
+    /* --- Clé et valeurs de la feuille actuelle --- */
+    nom        ; A4 ;
+    dte        ; D4 ;
+    vloc       ; HSTACK(X4; Y4; Z4; AA4; AB4; AC4; AD4) ;
+    labels     ; {"X","Y","Z","AA","AB","AC","AD"} ;
+
+    /* --- Références dans Dossier équipe --- */
+    nomB       ; 'Dossier équipe'!B:B ;
+    dteB       ; 'Dossier équipe'!R:R ;                 /* StartDate */
+    Nvals      ; 'Dossier équipe'!N:N ;
+    Ovals      ; 'Dossier équipe'!O:O ;
+    Pvals      ; 'Dossier équipe'!P:P ;
+    Qvals      ; 'Dossier équipe'!Q:Q ;
+    R2vals     ; 'Dossier équipe'!S:S ;                 /* ex-colonne R + 1 */
+    Svals      ; 'Dossier équipe'!T:T ;
+    Tvals      ; 'Dossier équipe'!U:U ;
+
+    /* --- Trouver la ligne correspondante Nom+Date --- */
+    idx        ; XMATCH(1; (nomB = nom) * (dteB = dte)) ;
+
+    IF( ISNA(idx) ;
+        "Absent dans Dossier équipe" ;
+
+        LET(
+            vexp ; HSTACK( INDEX(Nvals; idx) ;
+                           INDEX(Ovals; idx) ;
+                           INDEX(Pvals; idx) ;
+                           INDEX(Qvals; idx) ;
+                           INDEX(R2vals; idx) ;
+                           INDEX(Svals; idx) ;
+                           INDEX(Tvals; idx) ) ;
+
+            diffMask ; vexp <> vloc ;
+            nbDiff   ; SUM(--diffMask) ;
+
+            IF( nbDiff = 0 ;
+                "OK" ;
+                "Anomalie : " &
+                TEXTJOIN( ", "; TRUE;
+                          FILTER( labels ; diffMask ) )
+            )
+        )
+    )
+)
