@@ -1,0 +1,7 @@
+=LET(
+    start, A2,
+    endd, B2,
+    start2024, MAX(DATE(2024,1,1), MIN(start, DATE(2024,12,31))),
+    end2024, MIN(DATE(2024,12,31), MAX(endd, DATE(2024,1,1))),
+    IF(end2024 >= start2024, end2024 - start2024 + 1, 0)
+)
