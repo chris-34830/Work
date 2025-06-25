@@ -1,0 +1,6 @@
+=IF(
+     OR( AND($A$1="internal";      COLUMN()>=COLUMN($B$1); COLUMN()<=COLUMN($G$1));
+         AND($A$1="external";      COLUMN()>=COLUMN($H$1); COLUMN()<=COLUMN($K$1));
+         AND($A$1="cross border";  COLUMN()>=COLUMN($L$1); COLUMN()<=COLUMN($M$1))
+     );
+     "Yes;No";      "NE" )
