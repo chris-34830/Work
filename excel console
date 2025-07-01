@@ -1,0 +1,41 @@
+Clé
+TRIM(Code) & "|" & TEXT(Date, "yyyy-mm-dd")
+
+
+Présent Manuel
+=IF(COUNTIF(Manuel!$L:$L;$A2)>0;"Oui";"Non")
+
+Présent Logiciel
+=IF(COUNTIF(Logiciel!$K:$K;$A2)>0;"Oui";"Non")
+
+Dup Manuel
+=IF(COUNTIF(Manuel!$L:$L;$A2)>1;"A2";"")
+
+Dup Logiciel
+=IF(COUNTIF(Logiciel!$K:$K;$A2)>1;"A2";"")
+
+Date début
+=IFERROR(IF(XLOOKUP($A2;Manuel!$L:$L;Manuel!$D:$D;)= XLOOKUP($A2;Logiciel!$K:$K;Logiciel!$C:$C;);"OK";"A6");"Vide")
+
+Date fin
+=IFERROR(IF(XLOOKUP($A2;Manuel!$L:$L;Manuel!$E:$E;)= XLOOKUP($A2;Logiciel!$K:$K;Logiciel!$D:$D;);"OK";"A6");"Vide")
+
+Cotation
+=IFERROR(IF(XLOOKUP($A2;Manuel!$L:$L;Manuel!$G:$G;)= XLOOKUP($A2;Logiciel!$K:$K;Logiciel!$F:$F;);"OK";"A6");"Vide")
+
+Control Result ID
+=IFERROR(IF(XLOOKUP($A2;Manuel!$L:$L;Manuel!$I:$I;)= XLOOKUP($A2;Logiciel!$K:$K;Logiciel!$G:$G;);"OK";"A6");"Vide")
+
+Date réalisation
+=IFERROR(IF(XLOOKUP($A2;Manuel!$L:$L;Manuel!$F:$F;)= XLOOKUP($A2;Logiciel!$K:$K;Logiciel!$E:$E;);"OK";"A6");"Vide")
+
+Type anomalie
+=TEXTJOIN("" ; "";TRUE;
+  IF(B2=""Non"";""A1(Manuel)"";"""");
+  IF(C2=""Non"";""A1(Logiciel)"";"""");
+  D2;E2;
+  IF(F2<>""OK"";F2;"""");
+  IF(G2<>""OK"";G2;"""");
+  IF(H2<>""OK"";H2;"""");
+  IF(I2<>""OK"";I2;"""");
+  IF(J2<>""OK"";J2;"""") )
