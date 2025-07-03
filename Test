@@ -1,0 +1,27 @@
+**Objet : Clarifications requises – anomalies identifiées lors du contrôle PDP 04 (filière SSP, exercice 2023)**
+
+Bonjour \[Nom / Équipe],
+
+Dans le cadre de la revue du contrôle PDP 04 menée sur l’exercice 2023 pour la filière SSP, nous avons relevé plusieurs anomalies qui méritent d’être confirmées ou éclaircies afin de finaliser la cotation ainsi que la documentation associée.
+
+Tout d’abord, il apparaît que le contrat RPA0013092 est rattaché à l’arrangement AR0000778 placé sous la responsabilité BDL, alors que les informations disponibles laissent penser qu’il s’agit d’une erreur de périmètre dans ROPA. Cette situation nous conduit à proposer une cotation N/E au point 4 et, par cohérence, à envisager le même classement pour le point 6. Par ailleurs, des contrats relevant des filières operation et facility, bien qu’affichés sous process owner BGL, semblent en réalité appartenir à des périmètres Groupe non détenus localement. Nous avons également constaté que plusieurs contrats demeurent rattachés à une Business Unit ne correspondant pas à leur process owner, souvent parce que les arrangements proviennent d’un périmètre différent.
+
+Afin d’avancer, nous souhaiterions votre retour sur plusieurs points :
+– nous avons recensé des tac pac émis en 2023 qui ne figurent pas dans le document CVSIT ; devons-nous les considérer comme Non Évaluables ?
+– le rattachement du contrat RPA0013092 à AR0000778 constitue-t-il bien une erreur ROPA confirmée et, si oui, suffit-il à justifier la note N/E pour le point 4 et, le cas échéant, son extension au point 6 ?
+– quelle démarche retenons-nous pour traiter les doublons relevés dans ROPA et pour corriger le rattachement des contrats identifiés à la mauvaise BU ?
+– pourriez-vous préciser la signification ainsi que le contenu attendu de la colonne CU dans les fichiers d’extraction ?
+– la méthode de sélection de l’échantillon pour le contrôle 4.4 vous paraît-elle appropriée ou conviendrait-il plutôt d’inclure un contrat cross-border, conformément à la procédure couvrant les arrangements inter-co ?
+– concernant l’item RE622 (KYC), est-il pertinent d’exclure Tom Next du périmètre puisqu’il utilise nos propres systèmes, et de considérer I-Hub comme un contrôle opérationnel ?
+– de façon plus générale, pouvez-vous confirmer le scope complet du contrôle afin de garantir l’exhaustivité de l’analyse ?
+– enfin, sur le volet Mastercard Servicing, doit-on conclure qu’il n’existe qu’un framework contractuel sans contrat d’implémentation ni documentation de service formelle ?
+
+Vos réponses sur ces différents sujets, ainsi que la validation de la cotation N/E proposée et le cas échéant la correction des rattachements, nous permettront de clôturer le dossier dans les délais. Nous restons naturellement disponibles pour organiser une réunion rapide si cela facilite la prise de décision.
+
+Je vous remercie par avance pour votre retour et reste à votre disposition pour toute information complémentaire.
+
+Bien cordialement,
+
+\[Votre Prénom NOM]
+\[Votre fonction] – \[Équipe / Département]
+\[Téléphone] | \[Email]
