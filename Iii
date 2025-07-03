@@ -1,0 +1,15 @@
+=IFERROR(
+    IF(
+        OR(
+            XLOOKUP($A2;Manuel!$L:$L;Manuel!$G:$G;) 
+               = XLOOKUP($A2;Logiciel!$K:$K;Logiciel!$F:$F;);
+            AND(
+                XLOOKUP($A2;Manuel!$L:$L;Manuel!$G:$G;)     ="NE";
+                XLOOKUP($A2;Logiciel!$K:$K;Logiciel!$F:$F;) ="NO_EVENT_TO_CHECK"
+            )
+        );
+        "OK";
+        "A6"
+    );
+    "Vide"
+)
