@@ -1,0 +1,43 @@
+=IF($J2="";"";LET(
+  kk;$J2;
+  inM;ISNUMBER(MATCH(kk;T_Manuel[Key];0));
+  inL;ISNUMBER(MATCH(kk;T_Logiciel[Key];0));
+  dupM;COUNTIF(T_Manuel[Key];kk);
+  dupL;COUNTIF(T_Logiciel[Key];kk);
+
+  mPS;IF(inM;XLOOKUP(kk;T_Manuel[Key];T_Manuel[Date de début];"");"");
+  lPS;IF(inL;XLOOKUP(kk;T_Logiciel[Key];T_Logiciel[Covered Period Start];"");"");
+  mPE;IF(inM;XLOOKUP(kk;T_Manuel[Key];T_Manuel[Date de fin];"");"");
+  lPE;IF(inL;XLOOKUP(kk;T_Logiciel[Key];T_Logiciel[Covered Period End];"");"");
+
+  mCo;IF(inM;XLOOKUP(kk;T_Manuel[Key];T_Manuel[Cotation];"");"");
+  lCo;IF(inL;XLOOKUP(kk;T_Logiciel[Key];T_Logiciel[Cotation];"");"");
+  nCoM;IF(inM;UPPER(TRIM(mCo));"");
+  nCoL;IF(inL;UPPER(TRIM(lCo));"");
+  eqCo;OR(nCoM=nCoL;AND(nCoM="NO EVENT TO CHECK";nCoL="N/E");AND(nCoM="N/E";nCoL="NO EVENT TO CHECK"));
+
+  mCR;IF(inM;XLOOKUP(kk;T_Manuel[Key];T_Manuel[Control Result ID];"");"");
+  lCR;IF(inL;XLOOKUP(kk;T_Logiciel[Key];T_Logiciel[Control Result ID];"");"");
+
+  mEx;IF(inM;XLOOKUP(kk;T_Manuel[Key];T_Manuel[Date réalisation];"");"");
+  lEx;IF(inL;XLOOKUP(kk;T_Logiciel[Key];T_Logiciel[Control executed date];"");"");
+  d_mEx;IF(ISNUMBER(mEx);INT(mEx);IFERROR(INT(DATEVALUE(mEx));""));
+  d_lEx;IF(ISNUMBER(lEx);INT(lEx);IFERROR(INT(DATEVALUE(lEx));""));
+
+  dv_mPS;IF(ISNUMBER(mPS);mPS;IFERROR(DATEVALUE(mPS);""));
+  dv_lPS;IF(ISNUMBER(lPS);lPS;IFERROR(DATEVALUE(lPS);""));
+  dv_mPE;IF(ISNUMBER(mPE);mPE;IFERROR(DATEVALUE(mPE);""));
+  dv_lPE;IF(ISNUMBER(lPE);lPE;IFERROR(DATEVALUE(lPE);""));
+
+  raisons;TEXTJOIN("; ";TRUE;
+    IF(NOT(inM);"Absent de Manuel";"");
+    IF(NOT(inL);"Absent de Logiciel";"");
+    IF(dupM>1;"Dupliqué Manuel";"");
+    IF(dupL>1;"Dupliqué Logiciel";"");
+    IF(AND(inM;inL;ISNUMBER(dv_mPS);ISNUMBER(dv_lPS);dv_mPS<>dv_lPS);"Date de début différente (M="&TEXT(dv_mPS;"dd/mm/yyyy")&" ; L="&TEXT(dv_lPS;"dd/mm/yyyy")&")";"");
+    IF(AND(inM;inL;ISNUMBER(dv_mPE);ISNUMBER(dv_lPE);dv_mPE<>dv_lPE);"Date de fin différente (M="&TEXT(dv_mPE;"dd/mm/yyyy")&" ; L="&TEXT(dv_lPE;"dd/mm/yyyy")&")";"");
+    IF(AND(inM;inL;NOT(eqCo));"Cotation différente (M="&mCo&" ; L="&lCo&")";"");
+    IF(AND(inM;inL;ISNUMBER(d_mEx);ISNUMBER(d_lEx);d_mEx<>d_lEx);"Date de réalisation différente (M="&TEXT(d_mEx;"dd/mm/yyyy")&" ; L="&TEXT(d_lEx;"dd/mm/yyyy")&")";"")
+  );
+  IF(raisons="";"pas d'anomalie";raisons)
+))
