@@ -1,0 +1,168 @@
+Code_clean
+
+=SUBSTITUTE(UPPER(TRIM([@[Control Exec LCP Control]]));" ";"")
+
+Code_has_space (utile en nettoyage, non utilisée pour les anomalies)
+
+=IF(ISNUMBER(SEARCH(" ";[@[Control Exec LCP Control]]));"Yes";"")
+
+Start_norm (robuste si la cellule est déjà une date)
+
+=IF(ISNUMBER([@[Risk360 Start date]]);[@[Risk360 Start date]];DATEVALUE([@[Risk360 Start date]]))
+
+Key
+
+=[@Code_clean]&"|"&TEXT([@Start_norm];"yyyymmdd")
+
+Dup_count
+
+=COUNTIFS([Key];[@Key])
+
+T_Logiciel — ajoutez ces colonnes
+
+Code_clean
+
+=SUBSTITUTE(UPPER(TRIM([@[Control Exec]]));" ";"")
+
+Code_has_space
+
+=IF(ISNUMBER(SEARCH(" ";[@[Control Exec]]));"Yes";"")
+
+Start_norm
+
+=IF(ISNUMBER([@[Control execution date]]);[@[Control execution date]];DATEVALUE([@[Control execution date]]))
+
+Key
+
+=[@Code_clean]&"|"&TEXT([@Start_norm];"yyyymmdd")
+
+Dup_count
+
+=COUNTIFS([Key];[@Key])
+
+
+
+
+
+En-têtes (ligne 1) :
+A: Code | B: Start date | C: Source | D: Raison | E: Période début | F: Période fin | G: Cotation | H: Control Result ID | I: Date de réalisation | J: Key_Union | K: Reason_Full
+J2 — Union de toutes les clés (sans VSTACK/CHOOSE)
+
+=UNIQUE(LET(
+  kM;T_Manuel[Key];
+  kL;T_Logiciel[Key];
+  nM;ROWS(kM);
+  nL;ROWS(kL);
+  s;SEQUENCE(nM+nL);
+  a;IFERROR(INDEX(kM;s);"");
+  b;IFERROR(INDEX(kL;s-nM);"");
+  IF(s<=nM;a;b)
+))
+
+K2 — Raison(s) complète(s) (ligne-à-ligne; “pas d'anomalie” si tout OK)
+
+=IF($J2="";"";LET(
+  kk;$J2;
+  inM;ISNUMBER(MATCH(kk;T_Manuel[Key];0));
+  inL;ISNUMBER(MATCH(kk;T_Logiciel[Key];0));
+  dupM;COUNTIF(T_Manuel[Key];kk);
+  dupL;COUNTIF(T_Logiciel[Key];kk);
+
+  mPS;IF(inM;XLOOKUP(kk;T_Manuel[Key];T_Manuel[Date de début];"");"");
+  lPS;IF(inL;XLOOKUP(kk;T_Logiciel[Key];T_Logiciel[Covered Period Start];"");"");
+  mPE;IF(inM;XLOOKUP(kk;T_Manuel[Key];T_Manuel[Date de fin];"");"");
+  lPE;IF(inL;XLOOKUP(kk;T_Logiciel[Key];T_Logiciel[Covered Period End];"");"");
+  mCo;IF(inM;XLOOKUP(kk;T_Manuel[Key];T_Manuel[Cotation];"");"");
+  lCo;IF(inL;XLOOKUP(kk;T_Logiciel[Key];T_Logiciel[Cotation];"");"");
+  mCR;IF(inM;XLOOKUP(kk;T_Manuel[Key];T_Manuel[Control Result ID];"");"");
+  lCR;IF(inL;XLOOKUP(kk;T_Logiciel[Key];T_Logiciel[Control Result ID];"");"");
+  mEx;IF(inM;XLOOKUP(kk;T_Manuel[Key];T_Manuel[Date réalisation];"");"");
+  lEx;IF(inL;XLOOKUP(kk;T_Logiciel[Key];T_Logiciel[Control executed date];"");"");
+
+  dv_mPS;IF(ISNUMBER(mPS);mPS;IFERROR(DATEVALUE(mPS);""));
+  dv_lPS;IF(ISNUMBER(lPS);lPS;IFERROR(DATEVALUE(lPS);""));
+  dv_mPE;IF(ISNUMBER(mPE);mPE;IFERROR(DATEVALUE(mPE);""));
+  dv_lPE;IF(ISNUMBER(lPE);lPE;IFERROR(DATEVALUE(lPE);""));
+  dv_mEx;IF(ISNUMBER(mEx);mEx;IFERROR(DATEVALUE(mEx);""));
+  dv_lEx;IF(ISNUMBER(lEx);lEx;IFERROR(DATEVALUE(lEx);""));
+
+  raisons;TEXTJOIN("; ";TRUE;
+    IF(NOT(inM);"Absent de Manuel";"");
+    IF(NOT(inL);"Absent de Logiciel";"");
+    IF(dupM>1;"Dupliqué Manuel";"");
+    IF(dupL>1;"Dupliqué Logiciel";"");
+    IF(AND(inM;inL;ISNUMBER(dv_mPS);ISNUMBER(dv_lPS);dv_mPS<>dv_lPS);"Date de début différente (M="&TEXT(dv_mPS;"dd/mm/yyyy")&" ; L="&TEXT(dv_lPS;"dd/mm/yyyy")&")";"");
+    IF(AND(inM;inL;ISNUMBER(dv_mPE);ISNUMBER(dv_lPE);dv_mPE<>dv_lPE);"Date de fin différente (M="&TEXT(dv_mPE;"dd/mm/yyyy")&" ; L="&TEXT(dv_lPE;"dd/mm/yyyy")&")";"");
+    IF(AND(inM;inL;mCo<>lCo);"Cotation différente (M="&mCo&" ; L="&lCo&")";"");
+    IF(AND(inM;inL;mCR<>lCR);"Control Result ID différent (M="&mCR&" ; L="&lCR&")";"");
+    IF(AND(inM;inL;ISNUMBER(dv_mEx);ISNUMBER(dv_lEx);dv_mEx<>dv_lEx);"Date de réalisation différente (M="&TEXT(dv_mEx;"dd/mm/yyyy")&" ; L="&TEXT(dv_lEx;"dd/mm/yyyy")&")";"")
+  );
+  IF(raisons="";"pas d'anomalie";raisons)
+))
+
+    Recopiez K2 vers le bas (autant de lignes que nécessaire).
+
+2) Colonnes visibles A → I (ligne 2 puis recopier vers le bas)
+
+A2 — Code
+
+=IF($J2="";"";IFERROR(XLOOKUP($J2;T_Manuel[Key];T_Manuel[Code_clean]);XLOOKUP($J2;T_Logiciel[Key];T_Logiciel[Code_clean])))
+
+B2 — Start date
+
+=IF($J2="";"";TEXT(IFERROR(XLOOKUP($J2;T_Manuel[Key];T_Manuel[Start_norm]);XLOOKUP($J2;T_Logiciel[Key];T_Logiciel[Start_norm]));"dd/mm/yyyy"))
+
+C2 — Source
+
+=IF($J2="";"";LET(
+  m;ISNUMBER(MATCH($J2;T_Manuel[Key];0));
+  l;ISNUMBER(MATCH($J2;T_Logiciel[Key];0));
+  IF(NOT(m);"Logiciel uniquement";IF(NOT(l);"Manuel uniquement";"Les deux"))
+))
+
+D2 — Raison (reflète K)
+
+=IF($J2="";"";$K2)
+
+E2 — Période début (robuste)
+
+=IF($J2="";"";LET(
+  psM;XLOOKUP($J2;T_Manuel[Key];T_Manuel[Date de début];"");
+  psL;XLOOKUP($J2;T_Logiciel[Key];T_Logiciel[Covered Period Start];"");
+  val;IF(psM<>"";psM;psL);
+  IF(val="";"";TEXT(IF(ISNUMBER(val);val;DATEVALUE(val));"dd/mm/yyyy"))
+))
+
+F2 — Période fin (robuste)
+
+=IF($J2="";"";LET(
+  peM;XLOOKUP($J2;T_Manuel[Key];T_Manuel[Date de fin];"");
+  peL;XLOOKUP($J2;T_Logiciel[Key];T_Logiciel[Covered Period End];"");
+  val;IF(peM<>"";peM;peL);
+  IF(val="";"";TEXT(IF(ISNUMBER(val);val;DATEVALUE(val));"dd/mm/yyyy"))
+))
+
+G2 — Cotation
+
+=IF($J2="";"";LET(
+  cM;XLOOKUP($J2;T_Manuel[Key];T_Manuel[Cotation];"");
+  cL;XLOOKUP($J2;T_Logiciel[Key];T_Logiciel[Cotation];"");
+  IF(cM<>"";cM;cL)
+))
+
+H2 — Control Result ID
+
+=IF($J2="";"";LET(
+  rM;XLOOKUP($J2;T_Manuel[Key];T_Manuel[Control Result ID];"");
+  rL;XLOOKUP($J2;T_Logiciel[Key];T_Logiciel[Control Result ID];"");
+  IF(rM<>"";rM;rL)
+))
+
+I2 — Date de réalisation (robuste)
+
+=IF($J2="";"";LET(
+  dM;XLOOKUP($J2;T_Manuel[Key];T_Manuel[Date réalisation];"");
+  dL;XLOOKUP($J2;T_Logiciel[Key];T_Logiciel[Control executed date];"");
+  val;IF(dM<>"";dM;dL);
+  IF(val="";"";TEXT(IF(ISNUMBER(val);val;DATEVALUE(val));"dd/mm/yyyy"))
+))
