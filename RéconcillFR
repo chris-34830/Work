@@ -1,0 +1,77 @@
+=SUBSTITUE(MAJUSCULE(SUPPRESPACE([@[Control Exec LCP Control]]));" ";"")	=SI(ESTNUM(CHERCHE(" ";[@[Control Exec LCP Control]]));"Oui";"")	=DATEVAL([@[Risk360 Start date]])	=[@[Code_clean$]]&"|"&TEXTE([@[Start_norm]];"jjmmaaaa")	=NB.SI.ENS([Key];[@Key])
+=SUBSTITUE(MAJUSCULE(SUPPRESPACE([@[Control Exec]]));" ";"")	=SI(ESTNUM(CHERCHE(" ";[@[Control Exec]]));"Oui";"")	=DATEVAL([@[Control execution date]])	=[@[Code_clean$]]&"|"&TEXTE([@[Start_norm]];"jjmmaaaa")	=NB.SI.ENS([Key];[@Key])
+Code	Start date	Source	Raison	Période début	Période fin 	Cotation	Control Result ID	Date de réalisation	Key_Union	Reason_Full
+=LET(k;$J2#;masque;$K2#<>"";val;SIERREUR(RECHERCHEX(k;T_Manuel[Key];T_Manuel[Code_clean$]);RECHERCHEX(k;T_Logiciel[Key];T_Logiciel[Code_clean$]));FILTRE(val;masque))	=SI($K2="";"";TEXTE(SIERREUR(RECHERCHEX($J2;T_Manuel[Key];T_Manuel[Start_norm]);RECHERCHEX($J2;T_Logiciel[Key];T_Logiciel[Start_norm]));"jj/mm/aaaa"))	"=SI($K2="""";"""";LET(
+  m;ESTNUM(EQUIV($J2;T_Manuel[Key];0));
+  l;ESTNUM(EQUIV($J2;T_Logiciel[Key];0));
+  SI(NON(m);""Logiciel uniquement"";SI(NON(l);""Manuel uniquement"";""Les deux""))
+))"	=SI($K2="";"";$K2)	"=SI($K2="""";"""";LET(
+  psM;RECHERCHEX($J2;T_Manuel[Key];T_Manuel[Date de début];"""");
+  psL;RECHERCHEX($J2;T_Logiciel[Key];T_Logiciel[Covered Period Start];"""");
+  val;SI(psM<>"""";psM;psL);
+  SI(val="""";"""";TEXTE(DATEVAL(val);""jj/mm/aaaa""))
+))"	"=SI($K2="""";"""";LET(
+  peM;RECHERCHEX($J2;T_Manuel[Key];T_Manuel[Date de fin];"""");
+  peL;RECHERCHEX($J2;T_Logiciel[Key];T_Logiciel[Covered Period End];"""");
+  val;SI(peM<>"""";peM;peL);
+  SI(val="""";"""";TEXTE(DATEVAL(val);""jj/mm/aaaa""))
+))"	"=SI($K2="""";"""";LET(
+  cM;RECHERCHEX($J2;T_Manuel[Key];T_Manuel[Cotation];"""");
+  cL;RECHERCHEX($J2;T_Logiciel[Key];T_Logiciel[Cotation];"""");
+  SI(cM<>"""";cM;cL)
+))"	"=SI($K2="""";"""";LET(
+  rM;RECHERCHEX($J2;T_Manuel[Key];T_Manuel[Control Result ID];"""");
+  rL;RECHERCHEX($J2;T_Logiciel[Key];T_Logiciel[Control Result ID];"""");
+  SI(rM<>"""";rM;rL)
+))"	"=SI($K2="""";"""";LET(
+  dM;RECHERCHEX($J2;T_Manuel[Key];T_Manuel[Date réalisation];"""");
+  dL;RECHERCHEX($J2;T_Logiciel[Key];T_Logiciel[Control executed date];"""");
+  val;SI(dM<>"""";dM;dL);
+  SI(val="""";"""";TEXTE(DATEVAL(val);""jj/mm/aaaa""))
+))"	"=UNIQUE(LET(
+  kM;T_Manuel[Key];
+  kL;T_Logiciel[Key];
+  nM;LIGNES(kM);
+  nL;LIGNES(kL);
+  s;SEQUENCE(nM+nL);
+  a;SIERREUR(INDEX(kM;s);"""");
+  b;SIERREUR(INDEX(kL;s-nM);"""");
+  SI(s<=nM;a;b)
+))"	"=SI($J2="""";"""";LET(
+  kk;$J2;
+  inM;ESTNUM(EQUIV(kk;T_Manuel[Key];0));
+  inL;ESTNUM(EQUIV(kk;T_Logiciel[Key];0));
+  dupM;NB.SI(T_Manuel[Key];kk);
+  dupL;NB.SI(T_Logiciel[Key];kk);
+
+  mPS;SI(inM;RECHERCHEX(kk;T_Manuel[Key];T_Manuel[Date de début];"""");"""");
+  lPS;SI(inL;RECHERCHEX(kk;T_Logiciel[Key];T_Logiciel[Covered Period Start];"""");"""");
+  mPE;SI(inM;RECHERCHEX(kk;T_Manuel[Key];T_Manuel[Date de fin];"""");"""");
+  lPE;SI(inL;RECHERCHEX(kk;T_Logiciel[Key];T_Logiciel[Covered Period End];"""");"""");
+  mCo;SI(inM;RECHERCHEX(kk;T_Manuel[Key];T_Manuel[Cotation];"""");"""");
+  lCo;SI(inL;RECHERCHEX(kk;T_Logiciel[Key];T_Logiciel[Cotation];"""");"""");
+  mCR;SI(inM;RECHERCHEX(kk;T_Manuel[Key];T_Manuel[Control Result ID];"""");"""");
+  lCR;SI(inL;RECHERCHEX(kk;T_Logiciel[Key];T_Logiciel[Control Result ID];"""");"""");
+  mEx;SI(inM;RECHERCHEX(kk;T_Manuel[Key];T_Manuel[Date réalisation];"""");"""");
+  lEx;SI(inL;RECHERCHEX(kk;T_Logiciel[Key];T_Logiciel[Control executed date];"""");"""");
+
+  dv_mPS;SI(ESTNUM(mPS);mPS;SIERREUR(DATEVAL(mPS);""""));
+  dv_lPS;SI(ESTNUM(lPS);lPS;SIERREUR(DATEVAL(lPS);""""));
+  dv_mPE;SI(ESTNUM(mPE);mPE;SIERREUR(DATEVAL(mPE);""""));
+  dv_lPE;SI(ESTNUM(lPE);lPE;SIERREUR(DATEVAL(lPE);""""));
+  dv_mEx;SI(ESTNUM(mEx);mEx;SIERREUR(DATEVAL(mEx);""""));
+  dv_lEx;SI(ESTNUM(lEx);lEx;SIERREUR(DATEVAL(lEx);""""));
+
+  raisons;JOINDRE.TEXTE(""; "";VRAI;
+    SI(NON(inM);""Absent de Manuel"";"""");
+    SI(NON(inL);""Absent de Logiciel"";"""");
+    SI(dupM>1;""Dupliqué Manuel"";"""");
+    SI(dupL>1;""Dupliqué Logiciel"";"""");
+    SI(ET(inM;inL;ESTNUM(dv_mPS);ESTNUM(dv_lPS);dv_mPS<>dv_lPS);""Date de début différente (M=""&TEXTE(dv_mPS;""jj/mm/aaaa"")&"" ; L=""&TEXTE(dv_lPS;""jj/mm/aaaa"")&"")"";"""");
+    SI(ET(inM;inL;ESTNUM(dv_mPE);ESTNUM(dv_lPE);dv_mPE<>dv_lPE);""Date de fin différente (M=""&TEXTE(dv_mPE;""jj/mm/aaaa"")&"" ; L=""&TEXTE(dv_lPE;""jj/mm/aaaa"")&"")"";"""");
+    SI(ET(inM;inL;mCo<>lCo);""Cotation différente (M=""&mCo&"" ; L=""&lCo&"")"";"""");
+    SI(ET(inM;inL;mCR<>lCR);""Control Result ID différent (M=""&mCR&"" ; L=""&lCR&"")"";"""");
+    SI(ET(inM;inL;ESTNUM(dv_mEx);ESTNUM(dv_lEx);dv_mEx<>dv_lEx);""Date de réalisation différente (M=""&TEXTE(dv_mEx;""jj/mm/aaaa"")&"" ; L=""&TEXTE(dv_lEx;""jj/mm/aaaa"")&"")"";"""")
+  );
+  SI(raisons="""";""Pas d'anomalie"";raisons)
+))"
