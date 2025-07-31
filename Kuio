@@ -1,0 +1,15 @@
+=LET(
+    _data,              dataRange,
+    _c1,                cause1Range,
+    _c2,                cause2Range,
+    _dd,                dateDebutRange,
+    _df,                dateFinRange,
+    _dc,                dateCreationRange,
+    _key,               _c1 & "|" & _c2,
+    _rows,              SEQUENCE(ROWS(_data)),
+    _first,             MATCH(_key, _key, 0) = _rows,
+    _sameDate,          (INT(_dd) = INT(_df)) * (INT(_df) = INT(_dc)),
+    _beforeNine,        (HOUR(_dc) < 9),
+    FILTER(_data, _first * _sameDate * _beforeNine, "")
+)
+
