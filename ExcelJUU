@@ -1,0 +1,161 @@
+ID	Nom	Prénom	Âge		Recherche d'ID	
+101	Durand	Jean	34		ID à rechercher:	103
+102	Muller	Marie	29		Nom trouvé:	=@XLOOKUP(G2;A2:A6;B2:B6;"ID non trouvé")
+103	Dupont	Paul	42		Prénom trouvé:	=@XLOOKUP(G2;A2:A6;C2:C6;"ID non trouvé")
+104	Bernard	Sophie	37		Âge trouvé:	=@XLOOKUP(G2;A2:A6;D2:D6;"ID non trouvé")
+105	Durand	Luc	28		Exemple ID inexistant:	=@XLOOKUP(999;A2:A6;B2:B6;"ID non trouvé")
+
+
+
+
+Score min	Notation			Score saisi	77
+0	F			Notation (inférieure)	=@XLOOKUP(F1;A2:A7;B2:B7;"Non trouvé";-1)
+50	E			Notation (supérieure)	=@XLOOKUP(F1;A2:A7;B2:B7;"Non trouvé";1)
+60	D				
+70	C				
+80	B				
+90	A				
+
+
+
+ID	Nom	Prénom			Rechercher nom commençant par 'Mar'	=@XLOOKUP("Mar*";B2:B6;A2:A6;"Non trouvé";2)
+201	Martin	André			Rechercher nom finissant par 'in'	=@XLOOKUP("*in";B2:B6;A2:A6;"Non trouvé";2)
+202	Marcel	Claire				
+203	Martine	Louis				
+204	Marc	Julie				
+205	Marius	Paul				
+
+
+
+
+ID	Code			Expression régulière	^[A-D][0-9]{3}$
+301	A123			Premier code correspondant	=@XLOOKUP(F1;B2:B6;A2:A6;"Non trouvé";3)
+302	B456				
+303	C789				
+304	D12X				
+305	E345				
+
+
+
+ID	Nom	Prénom			Dernière occurrence de 'Dupont'	=@XLOOKUP("Dupont";B2:B6;A2:A6;"Non trouvé";0;-1)
+401	Dupont	Alice			Première occurrence de 'Durand'	=@XLOOKUP("Durand";B2:B6;A2:A6;"Non trouvé";0;1)
+402	Durand	Michel				
+403	Dupont	Brice				
+404	Durand	Chloé				
+405	Dupont	Daniel				
+
+
+
+ID	Contrat	Montant			ID	501
+501	C100	1500			Contrat	C101
+502	C101	2000			Montant correspondant	=@XLOOKUP(1;(@A2:A6=G1)*(@B2:B6=G2);C2:C6;"Non trouvé")
+501	C101	1700				
+503	C100	2200				
+501	C102	1600				
+
+
+
+ID	Valeur				Recherche binaire ordre croissant	=@XLOOKUP(35;B2:B8;A2:A8;"Non trouvé";-1;2)	7	70
+1	10				Recherche binaire ordre décroissant		6	60
+2	20				ID décroissant		5	50
+3	30				Valeur décroissante		4	40
+4	40				=@XLOOKUP(35;I1:I7;H1:H7;"Non trouvé";-1;-2)		3	30
+5	50						2	20
+6	60						1	10
+7	70							
+
+
+
+ID	Nom	Prénom	Ville			ID à rechercher	805
+801	Leroy	Anne	Paris			Nom et Prénom	=@XLOOKUP(H1;A2:A6;B2:C6;"Non trouvé")
+802	Petit	Luc	Lyon				
+803	Moreau	Sara	Marseille				
+804	Garcia	Nina	Toulouse				
+805	Leroy	Max	Nice				
+
+
+
+Feuille : Exact_Match
+
+    G3 : =XLOOKUP(G2,A2:A6,B2:B6,"ID non trouvé")
+    Recherche l’ID saisi en G2 dans la colonne A et renvoie le nom correspondant de la colonne B. Si l’ID n’existe pas, elle affiche « ID non trouvé ».
+
+    G4 : =XLOOKUP(G2,A2:A6,C2:C6,"ID non trouvé")
+    Même recherche, mais renvoie le prénom (colonne C).
+
+    G5 : =XLOOKUP(G2,A2:A6,D2:D6,"ID non trouvé")
+    Renvoie l’âge associé à l’ID.
+
+    G6 : =XLOOKUP(999,A2:A6,B2:B6,"ID non trouvé")
+    Exemple d’ID inexistant : comme 999 n’est pas dans la colonne A, la formule renvoie « ID non trouvé ».
+
+Feuille : Approximate_Match
+
+    F2 : =XLOOKUP(F1,A2:A7,B2:B7,"Non trouvé",-1)
+    Cherche le score saisi en F1 dans la colonne des scores et renvoie la note immédiatement inférieure (match_mode = −1). Pratique pour un barème de notes.
+
+    F3 : =XLOOKUP(F1,A2:A7,B2:B7,"Non trouvé",1)
+    Cherche le même score mais renvoie la note immédiatement supérieure (match_mode = 1).
+
+Feuille : Wildcard_Search
+
+    G1 : =XLOOKUP("Mar*",B2:B6,A2:A6,"Non trouvé",2)
+    Utilise les jokers (match_mode = 2) pour trouver le premier nom commençant par « Mar » et retourne l’ID correspondant.
+
+    G2 : =XLOOKUP("*in",B2:B6,A2:A6,"Non trouvé",2)
+    Cherche le premier nom se terminant par « in » et renvoie l’ID.
+
+Feuille : Regex_Search
+
+    F2 : =XLOOKUP(F1,B2:B6,A2:A6,"Non trouvé",3)
+    Recherche le premier code de la colonne B qui correspond à l’expression régulière saisie en F1 (match_mode = 3) et renvoie l’ID associé. Dans l’exemple, le motif ^[A-D][0-9]{3}$ signifie : une lettre entre A et D suivie de trois chiffres.
+
+Feuille : Reverse_Search
+
+    G1 : =XLOOKUP("Dupont",B2:B6,A2:A6,"Non trouvé",0,-1)
+    Avec search_mode = -1, la formule parcourt la liste à l’envers et renvoie l’ID de la dernière occurrence du nom « Dupont ».
+
+    G2 : =XLOOKUP("Durand",B2:B6,A2:A6,"Non trouvé",0,1)
+    Recherche « Durand » en mode normal (du premier au dernier) et renvoie l’ID de la première occurrence.
+
+Feuille : Multiple_Criteria
+
+    G3 : =XLOOKUP(1,(A2:A6=G1)*(B2:B6=G2),C2:C6,"Non trouvé")
+    Combine deux critères : l’ID de la colonne A doit être égal à G1 et le contrat de la colonne B doit être égal à G2. Le produit (A2:A6=G1)*(B2:B6=G2) crée une colonne temporaire de 1 pour la ligne qui répond à ces deux conditions. XLOOKUP cherche la valeur 1 et retourne le montant correspondant de la colonne C.
+
+Feuille : Binary_Search
+
+    G1 : =XLOOKUP(35,B2:B8,A2:A8,"Non trouvé",-1,2)
+    Effectue une recherche binaire croissante (search_mode = 2) dans la colonne des valeurs triées. Comme 35 n’existe pas, match_mode = -1 renvoie l’ID associé à la valeur immédiatement inférieure (30, donc ID 3).
+
+    F5 : =XLOOKUP(35,I1:I7,H1:H7,"Non trouvé",-1,-2)
+    Utilise une recherche binaire décroissante (search_mode = −2) dans les colonnes H‑I (valeurs triées du plus grand au plus petit). La formule renvoie l’ID associé à la valeur la plus élevée qui est ≤ 35.
+
+Feuille : Return_Multiple_Columns
+
+    H2 : =XLOOKUP(H1,A2:A6,B2:C6,"Non trouvé")
+    Recherche l’ID indiqué en H1 et renvoie simultanément le nom et le prénom (les colonnes B et C). Comme return_array couvre deux colonnes, le résultat s’étend automatiquement sur deux cellules.
+
+Feuille : Duplicates
+
+    H2 : =XLOOKUP(H1,B2:B6,A2:A6,"Non trouvé")
+    Renvoie l’ID de la première occurrence du nom saisi en H1.
+
+    H3 : =XLOOKUP(H1,B2:B6,A2:A6,"Non trouvé",0,-1)
+    Renvoie l’ID de la dernière occurrence du même nom.
+
+    H4 : =FILTER(A2:A6,B2:B6=H1,"Aucun")
+    Renvoie tous les IDs dont le nom correspond à H1 ; c’est une alternative à XLOOKUP lorsqu’on veut toutes les occurrences.
+
+    H5 : =INDEX(A2:A6,SMALL(IF(B2:B6=H1,ROW(A2:A6)-ROW(A2)+1),2))
+    Combinaison d’INDEX, SMALL et d’un test logique pour extraire la deuxième occurrence du nom spécifié.
+
+Feuille : Duplicates_Case
+
+ Première itération : =XLOOKUP(H1,B2:B6,A2:A6,"Non trouvé") renvoie l’ID de la première occurrence du nom indiqué en H1.
+
+Dernière itération : =XLOOKUP(H1,B2:B6,A2:A6,"Non trouvé",0,-1) utilise search_mode = -1 pour renvoyer l’ID de la dernière occurrence.
+
+Toutes les itérations : =FILTER(A2:C6,B2:B6=H1) renvoie toutes les lignes (ID, Nom, Âge) correspondant au nom recherché.
+
+Itération n : =INDEX(A2:A6,SMALL(IF(B2:B6=H1,ROW(A2:A6)-ROW(A2)+1),H2)) retourne l’ID de la nième occurrence ; le numéro n est saisi en H2.
